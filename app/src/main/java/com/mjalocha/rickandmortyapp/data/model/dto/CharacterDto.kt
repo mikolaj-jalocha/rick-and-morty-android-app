@@ -1,7 +1,9 @@
 package com.mjalocha.rickandmortyapp.data.model.dto
 
-import kotlin.time.Instant
+import kotlinx.serialization.Serializable
 
+// TODO: add serializer for "created" (DateTime or Instant)
+@Serializable
 data class CharacterDto(
     val id: Int,
     val name: String,
@@ -14,5 +16,5 @@ data class CharacterDto(
     val image: String,
     val episode: List<String>,
     val url: String,
-    val created: Instant
+    val created: String
 )

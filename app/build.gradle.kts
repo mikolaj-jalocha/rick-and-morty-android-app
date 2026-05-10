@@ -59,6 +59,9 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
+    //lottie
+    implementation(libs.lottie.compose)
+
     // ktor
     implementation(platform(libs.ktor.bom))
     implementation(libs.ktor.client.core)

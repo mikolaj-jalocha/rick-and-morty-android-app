@@ -55,6 +55,10 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    // coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
     // ktor
     implementation(platform(libs.ktor.bom))
     implementation(libs.ktor.client.core)
@@ -81,7 +85,6 @@ dependencies {
 
     // utils
     implementation(libs.slf4j.android)
-
     implementation(libs.kotlinx.serialization.json)
 
 

@@ -89,6 +89,7 @@ dependencies {
     // utils
     implementation(libs.slf4j.android)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.ui.text.google.fonts)
 
 
     //tests

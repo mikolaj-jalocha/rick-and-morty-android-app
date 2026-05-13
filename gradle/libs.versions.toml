@@ -21,10 +21,12 @@ lifecycleViewmodelNav3 = "2.10.0"
 koin-annotations = "2.3.0"
 koin-ksp-compiler = "2.3.0"
 ksp = "2.2.21-2.0.4"
+uiTextGoogleFonts = "1.11.1"
 
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

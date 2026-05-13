@@ -16,6 +16,7 @@ class RickAndMortyApiImpl(
 ) : RickAndMortyApi {
     override suspend fun getCharacters(
         page: Int,
+        name: String?,
         status: Status?,
         gender: Gender?
     ): Result<CharacterResponse, DataError.Remote> {
@@ -23,6 +24,10 @@ class RickAndMortyApiImpl(
             httpClient.get {
                 url("https://rickandmortyapi.com/api/character")
                 parameter("page", page)
+
+                if (name != null) {
+                    parameter("name", name.lowercase())
+                }
                 if (status != null) {
                     parameter("status", status.name.lowercase())
                 }

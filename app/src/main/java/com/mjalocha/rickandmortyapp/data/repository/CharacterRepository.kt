@@ -9,6 +9,7 @@ import com.mjalocha.rickandmortyapp.data.utils.Result
 interface CharacterRepository {
     suspend fun getCharacters(
         page: Int = 1,
+        name: String? = null,
         status: Status? = null,
         gender: Gender? = null
     ): Result<CharacterResponse, DataError.Remote>

@@ -12,11 +12,13 @@ class CharacterRepositoryImpl(
 ) : CharacterRepository {
     override suspend fun getCharacters(
         page: Int,
+        name: String?,
         status: Status?,
         gender: Gender?
     ): Result<CharacterResponse, DataError.Remote> {
         return apiClient.getCharacters(
             page,
+            name,
             status,
             gender
         )

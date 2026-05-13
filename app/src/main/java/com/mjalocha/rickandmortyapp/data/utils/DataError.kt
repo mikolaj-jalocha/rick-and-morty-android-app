@@ -5,6 +5,7 @@ sealed interface DataError : Error {
         REQUEST_TIMEOUT,
         TOO_MANY_REQUESTS,
         NO_INTERNET,
+        NO_RESULTS,
         SERVER,
         SERIALIZATION,
         UNKNOWN

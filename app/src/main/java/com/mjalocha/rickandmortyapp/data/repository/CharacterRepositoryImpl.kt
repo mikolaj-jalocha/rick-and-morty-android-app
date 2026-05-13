@@ -3,6 +3,7 @@ package com.mjalocha.rickandmortyapp.data.repository
 import com.mjalocha.rickandmortyapp.data.model.CharacterResponse
 import com.mjalocha.rickandmortyapp.data.model.Gender
 import com.mjalocha.rickandmortyapp.data.model.Status
+import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
 import com.mjalocha.rickandmortyapp.data.network.RickAndMortyApi
 import com.mjalocha.rickandmortyapp.data.utils.DataError
 import com.mjalocha.rickandmortyapp.data.utils.Result
@@ -22,5 +23,9 @@ class CharacterRepositoryImpl(
             status,
             gender
         )
+    }
+
+    override suspend fun getCharacter(id: Int): Result<CharacterDto, DataError.Remote> {
+        return apiClient.getCharacter(id)
     }
 }

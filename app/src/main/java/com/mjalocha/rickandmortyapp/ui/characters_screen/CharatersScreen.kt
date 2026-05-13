@@ -133,9 +133,11 @@ private fun CharactersScreen(
                     columns = GridCells.Fixed(2),
                     contentPadding = PaddingValues(all = 4.dp)
                 ) {
-                    items(characters) {
+                    items(characters, key = { it.id }) {
                         CharacterCard(
-                            modifier = Modifier.padding(8.dp),
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .animateItem(),
                             imageUrl = it.image,
                             name = it.name,
                             status = it.status

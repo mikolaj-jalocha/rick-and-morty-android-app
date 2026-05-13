@@ -47,8 +47,7 @@ class RickAndMortyApiImpl(
     override suspend fun getCharacter(id: Int): Result<CharacterDto, DataError.Remote> {
         return safeCall<CharacterDto> {
             httpClient.get {
-                url(CHARACTER_BASE_URL)
-                parameter("id", id)
+                url("$CHARACTER_BASE_URL/$id")
             }
         }
     }

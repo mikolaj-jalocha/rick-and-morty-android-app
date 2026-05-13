@@ -1,11 +1,10 @@
 package com.mjalocha.rickandmortyapp.ui.characters_screen
 
-import androidx.annotation.RawRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,29 +12,33 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_9
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.annotation.ExperimentalCoilApi
-import coil3.compose.AsyncImage
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.mjalocha.rickandmortyapp.R
 import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
 import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
 import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto
+import com.mjalocha.rickandmortyapp.ui.components.CharacterCard
+import com.mjalocha.rickandmortyapp.ui.components.LottieLoader
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -45,54 +48,103 @@ fun CharactersScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     CharactersScreen(
         characters = state.characters,
+        searchPhrase = state.searchPhrase,
         isLoading = state.isLoading,
-        errorMessage = state.errorMessage
+        errorMessage = state.errorMessage,
+        onSearchQueryChange = {
+            viewModel.onSearchQueryChange(it)
+        }
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CharactersScreen(
     characters: List<CharacterDto>,
+    searchPhrase: String,
     isLoading: Boolean,
     errorMessage: String?,
+    onSearchQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (isLoading) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            LottieLoader(R.raw.loading_dots)
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    Scaffold(
+        topBar = {
+            SearchBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                inputField = {
+                    SearchBarDefaults.InputField(
+                        query = searchPhrase,
+                        onQueryChange = {
+                            onSearchQueryChange(it)
+                        },
+                        onSearch = {
+                            onSearchQueryChange(it)
+                            expanded = false
+                        },
+                        expanded = expanded,
+                        onExpandedChange = {
+                            expanded = it
+                        },
+                        placeholder = { Text("Search for a given character") },
+                    )
+                },
+                expanded = false,
+                onExpandedChange = {}
+            ) {
+
+            }
         }
-    } else {
-        LazyVerticalGrid(
-            modifier = modifier,
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(horizontal = 4.dp, vertical = 32.dp)
-        ) {
-            items(characters) {
-                CharacterCard(
-                    modifier = Modifier.padding(8.dp),
-                    imageUrl = it.image,
-                    name = it.name,
-                    status = it.status
-                )
+    ) { contentPadding ->
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+            ) {
+                LottieLoader(R.raw.loading_dots)
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Characters",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                    IconButton({}) {
+                        Icon(painterResource(R.drawable.ic_filter), contentDescription = null)
+                    }
+                }
+
+                LazyVerticalGrid(
+                    modifier = modifier.weight(3f),
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(all = 4.dp)
+                ) {
+                    items(characters) {
+                        CharacterCard(
+                            modifier = Modifier.padding(8.dp),
+                            imageUrl = it.image,
+                            name = it.name,
+                            status = it.status
+                        )
+                    }
+                }
             }
         }
     }
-}
-
-@Composable
-fun LottieLoader(
-    @RawRes
-    lottieFile: Int,
-    modifier: Modifier = Modifier
-) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(lottieFile))
-    LottieAnimation(
-        modifier = modifier,
-        composition = composition,
-        iterations = LottieConstants.IterateForever,
-    )
 }
 
 @Preview(
@@ -103,6 +155,7 @@ fun LottieLoader(
 @Composable
 fun CharactersScreenPreview() {
     CharactersScreen(
+        searchPhrase = "",
         characters = listOf(
             CharacterDto(
                 id = 1,
@@ -163,55 +216,8 @@ fun CharactersScreenPreview() {
         ),
         isLoading = false,
         errorMessage = null,
+        onSearchQueryChange = {}
     )
-}
-
-
-// TODO: add loading indicator
-@Composable
-fun CharacterCard(
-    imageUrl: String,
-    name: String,
-    status: String,
-    modifier: Modifier = Modifier
-) {
-    ElevatedCard(
-        elevation = CardDefaults.elevatedCardElevation(4.dp),
-        modifier = modifier.aspectRatio(0.75f)
-    ) {
-        Column(Modifier.fillMaxSize()) {
-            AsyncImage(
-                modifier = Modifier
-                    .weight(3f)
-                    .fillMaxWidth(),
-                model = imageUrl,
-                contentDescription = "Characters image",
-                error = painterResource(R.drawable.placeholder),
-                onLoading = {
-
-                },
-                contentScale = ContentScale.Crop
-            )
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxSize()
-                    .padding(top = 4.dp, start = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Text(
-                    text = name,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Text(
-                    text = "Status: $status",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-
-        }
-    }
 }
 
 

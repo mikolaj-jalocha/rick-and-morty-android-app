@@ -6,8 +6,8 @@ import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
 import com.mjalocha.rickandmortyapp.data.repository.CharacterRepository
 import com.mjalocha.rickandmortyapp.data.utils.onError
 import com.mjalocha.rickandmortyapp.data.utils.onSuccess
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -26,6 +26,38 @@ class CharactersViewModel(
         fetchCharacters()
     }
 
+    fun onSearchQueryChange(query: String) {
+        _state.update {
+            it.copy(
+                searchPhrase = query
+            )
+        }
+        charactersFetchJob?.cancel()
+        charactersFetchJob = viewModelScope.launch {
+            delay(timeMillis = 500L)
+            repository.getCharacters(
+                name = _state.value.searchPhrase
+            )
+                .onSuccess { data ->
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = null,
+                            characters = data.results
+                        )
+                    }
+                }.onError { error ->
+                    _state.update {
+                        it.copy(
+                            errorMessage = error.name,
+                            isLoading = false,
+                            characters = emptyList()
+                        )
+                    }
+                }
+        }
+    }
+
     fun fetchCharacters() {
         _state.update {
             it.copy(
@@ -34,7 +66,7 @@ class CharactersViewModel(
         }
 
         charactersFetchJob?.cancel()
-        charactersFetchJob = viewModelScope.launch(Dispatchers.IO) {
+        charactersFetchJob = viewModelScope.launch {
             repository.getCharacters().onSuccess { data ->
                 _state.update {
                     it.copy(
@@ -58,6 +90,7 @@ class CharactersViewModel(
 // TODO: replace DTO with domain model
 data class CharactersScreenState(
     val characters: List<CharacterDto> = emptyList(),
+    val searchPhrase: String = "",
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )

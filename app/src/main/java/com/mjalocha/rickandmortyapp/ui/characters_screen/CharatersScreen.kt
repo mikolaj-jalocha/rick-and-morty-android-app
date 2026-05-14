@@ -39,6 +39,7 @@ import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
 import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto
 import com.mjalocha.rickandmortyapp.ui.components.CharacterCard
 import com.mjalocha.rickandmortyapp.ui.components.LottieLoader
+import com.mjalocha.rickandmortyapp.ui.theme.RickAndMortyAppTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -156,70 +157,72 @@ private fun CharactersScreen(
 )
 @Composable
 fun CharactersScreenPreview() {
-    CharactersScreen(
-        searchPhrase = "",
-        characters = listOf(
-            CharacterDto(
-                id = 1,
-                name = "Rick Sanchez",
-                status = "Alive",
-                species = "Human",
-                type = "",
-                gender = "Male",
-                origin = OriginDto("", ""),
-                location = LocationDto("", ""),
-                image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-                episode = emptyList(),
-                url = "",
-                created = "2017-11-04T18:48:46.250Z"
+    RickAndMortyAppTheme {
+        CharactersScreen(
+            searchPhrase = "",
+            characters = listOf(
+                CharacterDto(
+                    id = 1,
+                    name = "Rick Sanchez",
+                    status = "Alive",
+                    species = "Human",
+                    type = "",
+                    gender = "Male",
+                    origin = OriginDto("", ""),
+                    location = LocationDto("", ""),
+                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+                    episode = emptyList(),
+                    url = "",
+                    created = "2017-11-04T18:48:46.250Z"
+                ),
+                CharacterDto(
+                    id = 2,
+                    name = "Morty Smith",
+                    status = "Alive",
+                    species = "Human",
+                    type = "",
+                    gender = "Male",
+                    origin = OriginDto("", ""),
+                    location = LocationDto("", ""),
+                    image = "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
+                    episode = emptyList(),
+                    url = "",
+                    created = "2017-11-04T18:50:21.651Z"
+                ),
+                CharacterDto(
+                    id = 7,
+                    name = "Abradolf Lincler",
+                    status = "Unknown",
+                    species = "Human",
+                    type = "Genetic experiment",
+                    gender = "Male",
+                    origin = OriginDto("", ""),
+                    location = LocationDto("", ""),
+                    image = "https://rickandmortyapi.com/api/character/avatar/7.jpeg",
+                    episode = emptyList(),
+                    url = "",
+                    created = "2017-11-04T19:59:20.523Z"
+                ),
+                CharacterDto(
+                    id = 10,
+                    name = "Alan Rails",
+                    status = "Dead",
+                    species = "Human",
+                    type = "Superhuman",
+                    gender = "Male",
+                    origin = OriginDto("", ""),
+                    location = LocationDto("", ""),
+                    image = "https://rickandmortyapi.com/api/character/avatar/10.jpeg",
+                    episode = emptyList(),
+                    url = "",
+                    created = "2017-11-04T20:19:09.017Z"
+                )
             ),
-            CharacterDto(
-                id = 2,
-                name = "Morty Smith",
-                status = "Alive",
-                species = "Human",
-                type = "",
-                gender = "Male",
-                origin = OriginDto("", ""),
-                location = LocationDto("", ""),
-                image = "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
-                episode = emptyList(),
-                url = "",
-                created = "2017-11-04T18:50:21.651Z"
-            ),
-            CharacterDto(
-                id = 7,
-                name = "Abradolf Lincler",
-                status = "Unknown",
-                species = "Human",
-                type = "Genetic experiment",
-                gender = "Male",
-                origin = OriginDto("", ""),
-                location = LocationDto("", ""),
-                image = "https://rickandmortyapi.com/api/character/avatar/7.jpeg",
-                episode = emptyList(),
-                url = "",
-                created = "2017-11-04T19:59:20.523Z"
-            ),
-            CharacterDto(
-                id = 10,
-                name = "Alan Rails",
-                status = "Dead",
-                species = "Human",
-                type = "Superhuman",
-                gender = "Male",
-                origin = OriginDto("", ""),
-                location = LocationDto("", ""),
-                image = "https://rickandmortyapi.com/api/character/avatar/10.jpeg",
-                episode = emptyList(),
-                url = "",
-                created = "2017-11-04T20:19:09.017Z"
-            )
-        ),
-        isLoading = false,
-        errorMessage = null,
-        onSearchQueryChange = {}
-    )
+            isLoading = false,
+            errorMessage = null,
+            onSearchQueryChange = {}
+        )
+    }
 }
 
 
@@ -227,10 +230,12 @@ fun CharactersScreenPreview() {
 @Preview()
 @Composable
 fun CharacterCardPreview() {
-    CharacterCard(
-        imageUrl = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-        name = "Rick Sanchez",
-        status = "Alive",
-        modifier = Modifier.width(200.dp)
-    )
+    RickAndMortyAppTheme {
+        CharacterCard(
+            imageUrl = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+            name = "Rick Sanchez",
+            status = "Alive",
+            modifier = Modifier.width(200.dp)
+        )
+    }
 }

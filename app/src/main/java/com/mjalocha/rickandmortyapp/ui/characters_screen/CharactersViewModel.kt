@@ -9,7 +9,7 @@ import com.mjalocha.rickandmortyapp.data.utils.onSuccess
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -18,7 +18,7 @@ class CharactersViewModel(
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(CharactersScreenState())
-    val state: StateFlow<CharactersScreenState> = _state
+    val state = _state.asStateFlow()
 
     private var charactersFetchJob: Job? = null
 
@@ -79,7 +79,8 @@ class CharactersViewModel(
                 _state.update {
                     it.copy(
                         errorMessage = error.name,
-                        isLoading = false
+                        isLoading = false,
+                        characters = emptyList()
                     )
                 }
             }

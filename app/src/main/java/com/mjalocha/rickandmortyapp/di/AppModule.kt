@@ -4,6 +4,7 @@ import com.mjalocha.rickandmortyapp.data.network.RickAndMortyApi
 import com.mjalocha.rickandmortyapp.data.network.RickAndMortyApiImpl
 import com.mjalocha.rickandmortyapp.data.repository.CharacterRepository
 import com.mjalocha.rickandmortyapp.data.repository.CharacterRepositoryImpl
+import com.mjalocha.rickandmortyapp.ui.character_details.CharacterDetailsViewModel
 import com.mjalocha.rickandmortyapp.ui.characters_screen.CharactersViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -46,5 +47,10 @@ class AppModule {
     fun charactersViewModel(
         characterRepository: CharacterRepository
     ) = CharactersViewModel(characterRepository)
+
+    @KoinViewModel
+    fun characterDetailsViewModel(
+        characterRepository: CharacterRepository
+    ) = CharacterDetailsViewModel(characterRepository)
 
 }

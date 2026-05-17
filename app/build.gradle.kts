@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrains.kotlin.serialization)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.koin.compiler)
 }
 
 
@@ -79,7 +79,6 @@ dependencies {
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)
     implementation(libs.koin.annotations)
-    ksp(libs.koin.ksp)
 
     // navigation
     implementation(libs.androidx.navigation3.ui)
@@ -110,6 +109,6 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
-ksp {
-    arg("KOIN_CONFIG_CHECK", "true")
+koinCompiler {
+    userLogs = true
 }

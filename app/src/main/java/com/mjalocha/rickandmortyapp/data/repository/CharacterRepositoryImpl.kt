@@ -7,7 +7,9 @@ import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
 import com.mjalocha.rickandmortyapp.data.network.RickAndMortyApi
 import com.mjalocha.rickandmortyapp.data.utils.DataError
 import com.mjalocha.rickandmortyapp.data.utils.Result
+import org.koin.core.annotation.Singleton
 
+@Singleton
 class CharacterRepositoryImpl(
     private val apiClient: RickAndMortyApi
 ) : CharacterRepository {

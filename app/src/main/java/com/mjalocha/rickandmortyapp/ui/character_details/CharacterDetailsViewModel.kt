@@ -11,10 +11,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.InjectedParam
 import org.koin.core.annotation.KoinViewModel
 
 @KoinViewModel
 class CharacterDetailsViewModel(
+    @InjectedParam val characterId: Int,
     private val repository: CharacterRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(CharacterDetailsScreenState())
@@ -34,7 +36,7 @@ class CharacterDetailsViewModel(
         }
         characterFetchJob?.cancel()
         characterFetchJob = viewModelScope.launch {
-            repository.getCharacter(id = 1).onSuccess { data ->
+            repository.getCharacter(id = characterId).onSuccess { data ->
                 _state.update {
                     it.copy(
                         isLoading = false,

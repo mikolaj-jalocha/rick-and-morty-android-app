@@ -44,6 +44,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CharactersScreen(
+    navigateToCharacterDetails: (characterId: Int) -> Unit,
     viewModel: CharactersViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -54,6 +55,9 @@ fun CharactersScreen(
         errorMessage = state.errorMessage,
         onSearchQueryChange = {
             viewModel.onSearchQueryChange(it)
+        },
+        onCharacterClick = {
+            navigateToCharacterDetails(it)
         }
     )
 }
@@ -66,6 +70,7 @@ private fun CharactersScreen(
     isLoading: Boolean,
     errorMessage: String?,
     onSearchQueryChange: (String) -> Unit,
+    onCharacterClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
@@ -141,7 +146,10 @@ private fun CharactersScreen(
                                 .animateItem(),
                             imageUrl = it.image,
                             name = it.name,
-                            status = it.status
+                            status = it.status,
+                            onClick = {
+                                onCharacterClick(it.id)
+                            }
                         )
                     }
                 }
@@ -220,7 +228,8 @@ fun CharactersScreenPreview() {
             ),
             isLoading = false,
             errorMessage = null,
-            onSearchQueryChange = {}
+            onSearchQueryChange = {},
+            onCharacterClick = {}
         )
     }
 }
@@ -235,7 +244,8 @@ fun CharacterCardPreview() {
             imageUrl = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
             name = "Rick Sanchez",
             status = "Alive",
-            modifier = Modifier.width(200.dp)
+            modifier = Modifier.width(200.dp),
+            onClick = {}
         )
     }
 }

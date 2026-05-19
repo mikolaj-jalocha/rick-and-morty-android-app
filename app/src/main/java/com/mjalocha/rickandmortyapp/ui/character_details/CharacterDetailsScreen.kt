@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
@@ -41,15 +42,19 @@ import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
 import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto
 import com.mjalocha.rickandmortyapp.ui.theme.RickAndMortyAppTheme
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun CharacterDetailsScreen(
-    viewModel: CharacterDetailsViewModel = koinViewModel()
+    characterId: Int,
+    onNavigateBack: () -> Unit,
+    viewModel: CharacterDetailsViewModel = koinViewModel { parametersOf(characterId) }
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     CharacterDetailsScreen(
         character = state.characterDetails,
-        isLoading = state.isLoading
+        isLoading = state.isLoading,
+        onNavigateBack = onNavigateBack
     )
 }
 
@@ -58,6 +63,7 @@ fun CharacterDetailsScreen(
 private fun CharacterDetailsScreen(
     character: CharacterDto?,
     isLoading: Boolean,
+    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (character != null) {
@@ -66,7 +72,7 @@ private fun CharacterDetailsScreen(
                 CenterAlignedTopAppBar(
                     title = { Text(character.name) },
                     navigationIcon = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = onNavigateBack) {
                             Icon(
                                 painterResource(R.drawable.ic_back),
                                 contentDescription = "Navigate back"
@@ -84,15 +90,18 @@ private fun CharacterDetailsScreen(
                         model = character.image,
                         contentDescription = "Image of the character",
                         error = painterResource(R.drawable.placeholder),
-                        modifier = Modifier.fillMaxWidth(),
-                        //  contentScale = ContentScale.Companion.Crop
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        contentScale = ContentScale.Crop
                     )
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
                         text = character.name,
                         style = MaterialTheme.typography.headlineLarge,
-                        modifier = Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(Alignment.CenterHorizontally)
 
                     )
 
@@ -255,7 +264,8 @@ private fun CharacterDetailsScreenPreview() {
     RickAndMortyAppTheme {
         CharacterDetailsScreen(
             character = mockCharacter,
-            isLoading = false
+            isLoading = false,
+            onNavigateBack = {}
         )
     }
 }
@@ -280,7 +290,8 @@ private fun CharacterDetailsScreenPreviewDarkMode() {
     RickAndMortyAppTheme {
         CharacterDetailsScreen(
             character = mockCharacter,
-            isLoading = false
+            isLoading = false,
+            onNavigateBack = {}
         )
     }
 }

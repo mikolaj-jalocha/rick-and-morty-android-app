@@ -24,11 +24,13 @@ fun CharacterCard(
     imageUrl: String,
     name: String,
     status: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ElevatedCard(
         elevation = CardDefaults.elevatedCardElevation(4.dp),
-        modifier = modifier.aspectRatio(0.75f)
+        modifier = modifier.aspectRatio(0.75f),
+        onClick = { onClick() }
     ) {
         Column(Modifier.Companion.fillMaxSize()) {
             AsyncImage(

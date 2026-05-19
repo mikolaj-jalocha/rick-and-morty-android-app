@@ -43,8 +43,8 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 koin-android = { module = "io.insert-koin:koin-android" }
 koin-android-test = { module = "io.insert-koin:koin-android-test" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
-koin-androidx-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation" }
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBom" }
+koin-compose-navigation3 = { module = "io.insert-koin:koin-compose-navigation3", version.ref = "koinBom" }
 koin-ktor = { module = "io.insert-koin:koin-ktor" }
 koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j" }
 koin-test = { module = "io.insert-koin:koin-test" }

@@ -2,8 +2,10 @@ package com.mjalocha.rickandmortyapp.ui.character_details
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,6 +42,7 @@ import com.mjalocha.rickandmortyapp.R
 import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
 import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
 import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto
+import com.mjalocha.rickandmortyapp.ui.components.LottieLoader
 import com.mjalocha.rickandmortyapp.ui.theme.RickAndMortyAppTheme
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -66,22 +69,30 @@ private fun CharacterDetailsScreen(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (character != null) {
-        Scaffold(
-            topBar = {
-                CenterAlignedTopAppBar(
-                    title = { Text(character.name) },
-                    navigationIcon = {
-                        IconButton(onClick = onNavigateBack) {
-                            Icon(
-                                painterResource(R.drawable.ic_back),
-                                contentDescription = "Navigate back"
-                            )
-                        }
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text(character?.name ?: "") },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            painterResource(R.drawable.ic_back),
+                            contentDescription = "Navigate back"
+                        )
                     }
-                )
+                }
+            )
+        }
+    ) { contentPadding ->
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+            ) {
+                LottieLoader(R.raw.loading_dots)
             }
-        ) { contentPadding ->
+        } else if (character != null) {
             LazyColumn(
                 modifier = modifier.padding(contentPadding)
             ) {
@@ -114,7 +125,9 @@ private fun CharacterDetailsScreen(
                     ) {
                         //TODO: extract to domain model
                         val contentColor =
-                            if (character.status == "Alive") Color(0xFF97CE4C) else Color(0xFFFF0000)
+                            if (character.status == "Alive") Color(0xFF97CE4C) else Color(
+                                0xFFFF0000
+                            )
 
                         Icon(
                             painterResource(R.drawable.ic_circle),
@@ -150,7 +163,11 @@ private fun CharacterDetailsScreen(
                         CharacterCardRowItem(
                             title = "Gender",
                             value = character.gender,
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                            modifier = Modifier.padding(
+                                start = 16.dp,
+                                end = 16.dp,
+                                bottom = 8.dp
+                            )
                         )
                     }
 
@@ -181,7 +198,6 @@ private fun CharacterDetailsScreen(
                         modifier = Modifier.padding(16.dp)
                     )
                 }
-
             }
         }
     }

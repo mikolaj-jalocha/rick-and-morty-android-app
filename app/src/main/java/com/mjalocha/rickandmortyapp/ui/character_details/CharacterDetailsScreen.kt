@@ -1,8 +1,11 @@
 package com.mjalocha.rickandmortyapp.ui.character_details
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -39,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.mjalocha.rickandmortyapp.R
+import com.mjalocha.rickandmortyapp.data.model.dto.EpisodeDto
 import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
 import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto
 import com.mjalocha.rickandmortyapp.ui.components.LottieLoader
@@ -191,15 +197,93 @@ private fun CharacterDetailsScreen(
                         letterSpacing = 1.sp,
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
-
                     CharacterDetailsListItem(
                         title = character.location.name,
                         leadingIcon = R.drawable.ic_globe,
                         modifier = Modifier.padding(16.dp)
                     )
                 }
+                item {
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(
+                            items = character.episode ?: emptyList(),
+                            key = { it.id }
+                        ) { episode ->
+                            EpisodeItem(
+                                episode = episode
+                            )
+                        }
+                    }
+                }
             }
         }
+    }
+}
+
+@Composable
+fun EpisodeItem(
+    episode: EpisodeDto,
+    modifier: Modifier = Modifier
+) {
+
+    val colors = listOf(
+        Color(0xFFFAFD7C),
+        Color(0xFF82491E),
+        Color(0xFF24325F),
+        Color(0xFFB7E4F9),
+        Color(0xFFFB6467),
+        Color(0xFF526E2D),
+        Color(0xFFE762D7),
+        Color(0xFFE89242),
+        Color(0xFFFAE48B),
+        Color(0xFFA6EEE6),
+        Color(0xFF917C5D),
+        Color(0xFF69C8EC)
+    )
+
+    Card(
+        modifier = modifier,
+        border = BorderStroke(width = 2.dp, color = colors.random())
+    ) {
+        Column(
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 32.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = "Episode ${episode.episode}",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                text = episode.name,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = "Aired on ${episode.airDate}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun EpisodeItemPreview() {
+    RickAndMortyAppTheme {
+        EpisodeItem(
+            EpisodeDto(
+                id = 1,
+                name = "Pilot",
+                airDate = "December 2, 2013",
+                episode = "S01E01",
+                characters = emptyList(),
+                url = "",
+                created = ""
+            )
+        )
     }
 }
 
@@ -272,7 +356,35 @@ private fun CharacterDetailsScreenPreview() {
         origin = OriginDto(name = "Earth", url = ""),
         location = LocationDto(name = "Earth", url = ""),
         image = "",
-        episode = null
+        episode = listOf(
+            EpisodeDto(
+                id = 1,
+                name = "Pilot",
+                airDate = "December 2, 2013",
+                episode = "S01E01",
+                characters = emptyList(),
+                url = "",
+                created = ""
+            ),
+            EpisodeDto(
+                id = 2,
+                name = "Pilot",
+                airDate = "December 2, 2013",
+                episode = "S01E01",
+                characters = emptyList(),
+                url = "",
+                created = ""
+            ),
+            EpisodeDto(
+                id = 3,
+                name = "Pilot",
+                airDate = "December 2, 2013",
+                episode = "S01E01",
+                characters = emptyList(),
+                url = "",
+                created = ""
+            )
+        )
     )
     RickAndMortyAppTheme {
         CharacterDetailsScreen(
@@ -295,7 +407,35 @@ private fun CharacterDetailsScreenPreviewDarkMode() {
         origin = OriginDto(name = "Earth", url = ""),
         location = LocationDto(name = "Earth", url = ""),
         image = "",
-        episode = null
+        episode = listOf(
+            EpisodeDto(
+                id = 1,
+                name = "Pilot",
+                airDate = "December 2, 2013",
+                episode = "S01E01",
+                characters = emptyList(),
+                url = "",
+                created = ""
+            ),
+            EpisodeDto(
+                id = 2,
+                name = "Pilot",
+                airDate = "December 2, 2013",
+                episode = "S01E01",
+                characters = emptyList(),
+                url = "",
+                created = ""
+            ),
+            EpisodeDto(
+                id = 3,
+                name = "Pilot",
+                airDate = "December 2, 2013",
+                episode = "S01E01",
+                characters = emptyList(),
+                url = "",
+                created = ""
+            )
+        )
     )
     RickAndMortyAppTheme {
         CharacterDetailsScreen(

@@ -1,9 +1,11 @@
 package com.mjalocha.rickandmortyapp.data.network
 
 import com.mjalocha.rickandmortyapp.data.model.CharacterResponse
+import com.mjalocha.rickandmortyapp.data.model.EpisodeResponse
 import com.mjalocha.rickandmortyapp.data.model.Gender
 import com.mjalocha.rickandmortyapp.data.model.Status
 import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
+import com.mjalocha.rickandmortyapp.data.model.dto.EpisodeDto
 import com.mjalocha.rickandmortyapp.data.utils.DataError
 import com.mjalocha.rickandmortyapp.data.utils.Result
 import com.mjalocha.rickandmortyapp.data.utils.safeCall
@@ -19,7 +21,7 @@ class RickAndMortyApiImpl(
 ) : RickAndMortyApi {
 
     companion object {
-        private const val CHARACTER_BASE_URL = "https://rickandmortyapi.com/api/character"
+        private const val BASE_URL = "https://rickandmortyapi.com/api"
     }
 
     override suspend fun getCharacters(
@@ -30,7 +32,7 @@ class RickAndMortyApiImpl(
     ): Result<CharacterResponse, DataError.Remote> {
         return safeCall<CharacterResponse> {
             httpClient.get {
-                url(CHARACTER_BASE_URL)
+                url("$BASE_URL/character")
                 parameter("page", page)
 
                 if (name != null) {
@@ -49,7 +51,39 @@ class RickAndMortyApiImpl(
     override suspend fun getCharacter(id: Int): Result<CharacterDto, DataError.Remote> {
         return safeCall<CharacterDto> {
             httpClient.get {
-                url("$CHARACTER_BASE_URL/$id")
+                url("$BASE_URL/character/$id")
+            }
+        }
+    }
+
+    override suspend fun getEpisodes(
+        page: Int,
+        name: String?,
+        episodeCode: String?
+    ): Result<EpisodeResponse, DataError.Remote> {
+        return safeCall<EpisodeResponse> {
+            httpClient.get {
+                httpClient.get {
+                    url("$BASE_URL/episode")
+                    parameter("page", page)
+
+                    if (name != null) {
+                        parameter("name", name.lowercase())
+                    }
+                    if (episodeCode != null) {
+                        parameter("episode", episodeCode.lowercase())
+                    }
+                }
+            }
+        }
+    }
+
+    override suspend fun getEpisodeById(
+        ids: List<Int>
+    ): Result<List<EpisodeDto>, DataError.Remote> {
+        return safeCall<List<EpisodeDto>> {
+            httpClient.get {
+                url("$BASE_URL/episode/${ids.joinToString(",", postfix = ",")}")
             }
         }
     }

@@ -2,10 +2,10 @@ package com.mjalocha.rickandmortyapp.ui.characters_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
 import com.mjalocha.rickandmortyapp.data.repository.CharacterRepository
 import com.mjalocha.rickandmortyapp.data.utils.onError
 import com.mjalocha.rickandmortyapp.data.utils.onSuccess
+import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +45,7 @@ class CharactersViewModel(
                         it.copy(
                             isLoading = false,
                             errorMessage = null,
-                            characters = data.results
+                            characters = data
                         )
                     }
                 }.onError { error ->
@@ -74,7 +74,7 @@ class CharactersViewModel(
                     it.copy(
                         isLoading = false,
                         errorMessage = null,
-                        characters = data.results
+                        characters = data
                     )
                 }
             }.onError { error ->
@@ -90,9 +90,8 @@ class CharactersViewModel(
     }
 }
 
-// TODO: replace DTO with domain model
 data class CharactersScreenState(
-    val characters: List<CharacterDto> = emptyList(),
+    val characters: List<CharacterDetails> = emptyList(),
     val searchPhrase: String = "",
     val isLoading: Boolean = false,
     val errorMessage: String? = null

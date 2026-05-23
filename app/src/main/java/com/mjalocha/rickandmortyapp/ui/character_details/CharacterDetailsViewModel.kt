@@ -2,10 +2,10 @@ package com.mjalocha.rickandmortyapp.ui.character_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
 import com.mjalocha.rickandmortyapp.data.repository.CharacterRepository
 import com.mjalocha.rickandmortyapp.data.utils.onError
 import com.mjalocha.rickandmortyapp.data.utils.onSuccess
+import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,7 +41,7 @@ class CharacterDetailsViewModel(
                     it.copy(
                         isLoading = false,
                         errorMessage = null,
-                        characterDetails = data
+                        characterDetails = data,
                     )
                 }
             }.onError { error ->
@@ -57,10 +57,10 @@ class CharacterDetailsViewModel(
     }
 
 }
-// TODO: replace DTO with domain model
 
+// TODO: replace DTO with domain model
 data class CharacterDetailsScreenState(
-    val characterDetails: CharacterDto? = null,
+    val characterDetails: CharacterDetails? = null,
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )

@@ -39,10 +39,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.mjalocha.rickandmortyapp.R
-import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
 import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
 import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto
 import com.mjalocha.rickandmortyapp.ui.components.LottieLoader
+import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
 import com.mjalocha.rickandmortyapp.ui.theme.RickAndMortyAppTheme
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -64,7 +64,7 @@ fun CharacterDetailsScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CharacterDetailsScreen(
-    character: CharacterDto?,
+    character: CharacterDetails?,
     isLoading: Boolean,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
@@ -263,19 +263,16 @@ private fun CharacterCardRowItem(
 @Preview(showBackground = true)
 @Composable
 private fun CharacterDetailsScreenPreview() {
-    val mockCharacter = CharacterDto(
+    val mockCharacter = CharacterDetails(
         id = 1,
         name = "Rick Sanchez",
         status = "Alive",
         species = "Human",
-        type = "",
         gender = "Male",
         origin = OriginDto(name = "Earth", url = ""),
         location = LocationDto(name = "Earth", url = ""),
         image = "",
-        episode = listOf("S01E01"),
-        url = "",
-        created = "2017-11-04T18:48:46.250Z"
+        episode = null
     )
     RickAndMortyAppTheme {
         CharacterDetailsScreen(
@@ -289,19 +286,16 @@ private fun CharacterDetailsScreenPreview() {
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun CharacterDetailsScreenPreviewDarkMode() {
-    val mockCharacter = CharacterDto(
+    val mockCharacter = CharacterDetails(
         id = 1,
         name = "Rick Sanchez",
         status = "Alive",
         species = "Human",
-        type = "",
         gender = "Male",
         origin = OriginDto(name = "Earth", url = ""),
         location = LocationDto(name = "Earth", url = ""),
         image = "",
-        episode = listOf("S01E01"),
-        url = "",
-        created = "2017-11-04T18:48:46.250Z"
+        episode = null
     )
     RickAndMortyAppTheme {
         CharacterDetailsScreen(

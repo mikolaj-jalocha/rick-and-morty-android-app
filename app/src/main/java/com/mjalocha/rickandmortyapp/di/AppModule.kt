@@ -8,7 +8,9 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Singleton
@@ -17,6 +19,7 @@ import org.koin.core.annotation.Singleton
 @ComponentScan("com.mjalocha")
 class AppModule {
 
+    @OptIn(ExperimentalSerializationApi::class)
     @Singleton
     fun httpClient(): HttpClient = HttpClient(OkHttp) {
         install(Logging) {
@@ -26,6 +29,7 @@ class AppModule {
         install(ContentNegotiation) {
             json(Json {
                 prettyPrint = true
+                namingStrategy = JsonNamingStrategy.SnakeCase
             })
         }
     }

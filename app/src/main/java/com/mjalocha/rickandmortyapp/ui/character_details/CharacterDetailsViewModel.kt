@@ -55,10 +55,8 @@ class CharacterDetailsViewModel(
             }
         }
     }
-
 }
 
-// TODO: replace DTO with domain model
 data class CharacterDetailsScreenState(
     val characterDetails: CharacterDetails? = null,
     val isLoading: Boolean = false,

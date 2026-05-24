@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.foundation.clickable
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,11 +45,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.mjalocha.rickandmortyapp.R
-import com.mjalocha.rickandmortyapp.data.model.dto.EpisodeDto
 import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
 import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto
 import com.mjalocha.rickandmortyapp.ui.components.LottieLoader
 import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
+import com.mjalocha.rickandmortyapp.ui.models.Episode
 import com.mjalocha.rickandmortyapp.ui.theme.RickAndMortyAppTheme
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -57,13 +58,15 @@ import org.koin.core.parameter.parametersOf
 fun CharacterDetailsScreen(
     characterId: Int,
     onNavigateBack: () -> Unit,
+    onEpisodeClick: (Int) -> Unit,
     viewModel: CharacterDetailsViewModel = koinViewModel { parametersOf(characterId) }
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     CharacterDetailsScreen(
         character = state.characterDetails,
         isLoading = state.isLoading,
-        onNavigateBack = onNavigateBack
+        onNavigateBack = onNavigateBack,
+        onEpisodeClick = onEpisodeClick
     )
 }
 
@@ -73,7 +76,7 @@ private fun CharacterDetailsScreen(
     character: CharacterDetails?,
     isLoading: Boolean,
     onNavigateBack: () -> Unit,
-    modifier: Modifier = Modifier
+    onEpisodeClick: (Int) -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -100,7 +103,7 @@ private fun CharacterDetailsScreen(
             }
         } else if (character != null) {
             LazyColumn(
-                modifier = modifier.padding(contentPadding)
+                contentPadding = contentPadding
             ) {
                 item {
                     AsyncImage(
@@ -213,7 +216,9 @@ private fun CharacterDetailsScreen(
                             key = { it.id }
                         ) { episode ->
                             EpisodeItem(
-                                episode = episode
+                                episode = episode,
+                                modifier = Modifier,
+                                onClick = { onEpisodeClick(episode.id) }
                             )
                         }
                     }
@@ -225,8 +230,9 @@ private fun CharacterDetailsScreen(
 
 @Composable
 fun EpisodeItem(
-    episode: EpisodeDto,
-    modifier: Modifier = Modifier
+    episode: Episode,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
 
     val colors = listOf(
@@ -245,7 +251,7 @@ fun EpisodeItem(
     )
 
     Card(
-        modifier = modifier,
+        modifier = modifier.clickable(onClick = onClick),
         border = BorderStroke(width = 2.dp, color = colors.random())
     ) {
         Column(
@@ -274,13 +280,12 @@ fun EpisodeItem(
 fun EpisodeItemPreview() {
     RickAndMortyAppTheme {
         EpisodeItem(
-            EpisodeDto(
+            Episode(
                 id = 1,
                 name = "Pilot",
                 airDate = "December 2, 2013",
                 episode = "S01E01",
                 characters = emptyList(),
-                url = "",
                 created = ""
             )
         )
@@ -288,7 +293,7 @@ fun EpisodeItemPreview() {
 }
 
 @Composable
-private fun CharacterDetailsListItem(
+fun CharacterDetailsListItem(
     title: String,
     @DrawableRes
     leadingIcon: Int,
@@ -357,31 +362,28 @@ private fun CharacterDetailsScreenPreview() {
         location = LocationDto(name = "Earth", url = ""),
         image = "",
         episode = listOf(
-            EpisodeDto(
+            Episode(
                 id = 1,
                 name = "Pilot",
                 airDate = "December 2, 2013",
                 episode = "S01E01",
                 characters = emptyList(),
-                url = "",
                 created = ""
             ),
-            EpisodeDto(
+            Episode(
                 id = 2,
                 name = "Pilot",
                 airDate = "December 2, 2013",
                 episode = "S01E01",
                 characters = emptyList(),
-                url = "",
                 created = ""
             ),
-            EpisodeDto(
+            Episode(
                 id = 3,
                 name = "Pilot",
                 airDate = "December 2, 2013",
                 episode = "S01E01",
                 characters = emptyList(),
-                url = "",
                 created = ""
             )
         )
@@ -408,31 +410,28 @@ private fun CharacterDetailsScreenPreviewDarkMode() {
         location = LocationDto(name = "Earth", url = ""),
         image = "",
         episode = listOf(
-            EpisodeDto(
+            Episode(
                 id = 1,
                 name = "Pilot",
                 airDate = "December 2, 2013",
                 episode = "S01E01",
                 characters = emptyList(),
-                url = "",
                 created = ""
             ),
-            EpisodeDto(
+            Episode(
                 id = 2,
                 name = "Pilot",
                 airDate = "December 2, 2013",
                 episode = "S01E01",
                 characters = emptyList(),
-                url = "",
                 created = ""
             ),
-            EpisodeDto(
+            Episode(
                 id = 3,
                 name = "Pilot",
                 airDate = "December 2, 2013",
                 episode = "S01E01",
                 characters = emptyList(),
-                url = "",
                 created = ""
             )
         )

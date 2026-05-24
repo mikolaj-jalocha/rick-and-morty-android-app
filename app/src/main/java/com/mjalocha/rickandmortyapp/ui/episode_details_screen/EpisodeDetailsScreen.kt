@@ -48,6 +48,7 @@ fun EpisodeDetailsScreen(
     EpisodeDetailsScreen(
         episode = state.episode,
         isLoading = state.isLoading,
+        errorMessage = state.errorMessage,
         onNavigateBack = onNavigateBack,
         onCharacterClick = navigateToCharacterDetails
     )
@@ -58,6 +59,7 @@ fun EpisodeDetailsScreen(
 private fun EpisodeDetailsScreen(
     episode: Episode?,
     isLoading: Boolean,
+    errorMessage: String?,
     onNavigateBack: () -> Unit,
     onCharacterClick: (Int) -> Unit
 ) {
@@ -83,6 +85,14 @@ private fun EpisodeDetailsScreen(
                     .padding(contentPadding)
             ) {
                 LottieLoader(R.raw.loading_dots)
+            }
+        } else if (errorMessage != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+            ) {
+                Text(text = "Something went wrong...")
             }
         } else if (episode != null) {
             LazyVerticalGrid(
@@ -168,6 +178,7 @@ fun EpisodeDetailsScreenPreview() {
                 created = "2017-11-10T12:56:33.798Z"
             ),
             isLoading = false,
+            errorMessage = null,
             onNavigateBack = {},
             onCharacterClick = {}
         )
@@ -191,6 +202,7 @@ fun EpisodeDetailsScreenPreviewDark() {
                 created = "2017-11-10T12:56:33.798Z"
             ),
             isLoading = false,
+            errorMessage = null,
             onNavigateBack = {},
             onCharacterClick = {}
         )

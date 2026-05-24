@@ -112,6 +112,14 @@ private fun CharactersScreen(
             ) {
                 LottieLoader(R.raw.loading_dots)
             }
+        } else if (errorMessage != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+            ) {
+                Text(text = "Something went wrong...")
+            }
         } else {
             Column(
                 modifier = Modifier

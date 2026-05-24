@@ -2,6 +2,7 @@ package com.mjalocha.rickandmortyapp.ui.character_details
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
-import androidx.compose.foundation.clickable
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -65,6 +65,7 @@ fun CharacterDetailsScreen(
     CharacterDetailsScreen(
         character = state.characterDetails,
         isLoading = state.isLoading,
+        errorMessage = state.errorMessage,
         onNavigateBack = onNavigateBack,
         onEpisodeClick = onEpisodeClick
     )
@@ -75,6 +76,7 @@ fun CharacterDetailsScreen(
 private fun CharacterDetailsScreen(
     character: CharacterDetails?,
     isLoading: Boolean,
+    errorMessage: String?,
     onNavigateBack: () -> Unit,
     onEpisodeClick: (Int) -> Unit = {}
 ) {
@@ -100,6 +102,14 @@ private fun CharacterDetailsScreen(
                     .padding(contentPadding)
             ) {
                 LottieLoader(R.raw.loading_dots)
+            }
+        } else if (errorMessage != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+            ) {
+                Text(text = "Something went wrong...")
             }
         } else if (character != null) {
             LazyColumn(
@@ -392,6 +402,7 @@ private fun CharacterDetailsScreenPreview() {
         CharacterDetailsScreen(
             character = mockCharacter,
             isLoading = false,
+            errorMessage = null,
             onNavigateBack = {}
         )
     }
@@ -440,6 +451,7 @@ private fun CharacterDetailsScreenPreviewDarkMode() {
         CharacterDetailsScreen(
             character = mockCharacter,
             isLoading = false,
+            errorMessage = null,
             onNavigateBack = {}
         )
     }

@@ -1,21 +1,20 @@
 package com.mjalocha.rickandmortyapp.data.repository
 
-import androidx.compose.ui.util.fastMapNotNull
 import com.mjalocha.rickandmortyapp.data.model.Gender
 import com.mjalocha.rickandmortyapp.data.model.Status
-import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
 import com.mjalocha.rickandmortyapp.data.model.dto.EpisodeDto
+import com.mjalocha.rickandmortyapp.data.model.dto.episodesIds
 import com.mjalocha.rickandmortyapp.data.network.RickAndMortyApi
 import com.mjalocha.rickandmortyapp.data.utils.DataError
 import com.mjalocha.rickandmortyapp.data.utils.Result
-import com.mjalocha.rickandmortyapp.data.utils.map
 import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
+import com.mjalocha.rickandmortyapp.ui.models.toCharacter
+import com.mjalocha.rickandmortyapp.ui.models.toEpisode
 import org.koin.core.annotation.Singleton
 
 @Singleton
 class CharacterRepositoryImpl(
-    private val apiClient: RickAndMortyApi,
-    private val episodeRepository: EpisodeRepository
+    private val api: RickAndMortyApi
 ) : CharacterRepository {
     override suspend fun getCharacters(
         page: Int,
@@ -24,7 +23,7 @@ class CharacterRepositoryImpl(
         gender: Gender?
     ): Result<List<CharacterDetails>, DataError.Remote> {
 
-        return when (val response = apiClient.getCharacters(
+        return when (val response = api.getCharacters(
             page = page,
             name = name,
             status = status,
@@ -43,37 +42,40 @@ class CharacterRepositoryImpl(
     }
 
     override suspend fun getCharacter(id: Int): Result<CharacterDetails, DataError.Remote> {
-        return apiClient.getCharacter(id)
-            .map {
-                val episodes = fetchEpisodes(it.episodesIds())
-                it.toCharacter(episodes)
+        return when (val response = api.getCharacter(id)) {
+            is Result.Success -> {
+                val ids = response.data.episodesIds()
+                val episodes = when (val response = api.getEpisodeById(ids)) {
+                    is Result.Success -> response.data.map { it.toEpisode(null) }
+                    is Result.Error -> null
+                }
+                Result.Success(response.data.toCharacter(episodes))
             }
-    }
 
-    private suspend fun fetchEpisodes(ids: List<Int>): List<EpisodeDto>? {
-        return when (val episodeResponse = episodeRepository.getEpisodeById(ids)) {
-            is Result.Success -> episodeResponse.data
-            is Result.Error -> null
+            is Result.Error -> Result.Error(response.error)
         }
     }
-}
 
-private fun CharacterDto.toCharacter(episodes: List<EpisodeDto>?): CharacterDetails {
-    return CharacterDetails(
-        id = this.id,
-        name = this.name,
-        status = this.status,
-        species = this.species,
-        gender = this.gender,
-        origin = this.origin,
-        location = this.location,
-        image = this.image,
-        episode = episodes
-    )
-}
+    override suspend fun getCharacterById(ids: List<Int>): Result<List<CharacterDetails>, DataError.Remote> {
+        return when (val response = api.getCharacterById(ids)) {
+            is Result.Success -> {
+                val allEpisodeIds = response.data.flatMap { it.episodesIds() }.distinct()
+                val episodesMap: Map<Int, EpisodeDto> =
+                    when (val response = api.getEpisodeById(allEpisodeIds)) {
+                        is Result.Success -> response.data.associateBy { it.id }
+                        is Result.Error -> emptyMap()
+                    }
 
-private fun CharacterDto.episodesIds(): List<Int> {
-    return this.episode.fastMapNotNull { episodeUrl ->
-        episodeUrl.substringAfter("episode/").toIntOrNull()
+                val characters = response.data.map { dto ->
+                    val idsForChar = dto.episodesIds()
+                    val eps = idsForChar.mapNotNull { episodesMap[it] }
+                    dto.toCharacter(eps.map { it.toEpisode(null) })
+                }
+
+                Result.Success(characters)
+            }
+
+            is Result.Error -> Result.Error(response.error)
+        }
     }
 }

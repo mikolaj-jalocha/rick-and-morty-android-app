@@ -17,4 +17,8 @@ interface CharacterRepository {
     suspend fun getCharacter(
         id: Int
     ): Result<CharacterDetails, DataError.Remote>
+
+    suspend fun getCharacterById(
+        ids: List<Int>
+    ): Result<List<CharacterDetails>, DataError.Remote>
 }

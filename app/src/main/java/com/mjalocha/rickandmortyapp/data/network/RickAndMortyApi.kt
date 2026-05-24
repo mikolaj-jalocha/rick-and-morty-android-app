@@ -21,6 +21,11 @@ interface RickAndMortyApi {
         id: Int
     ): Result<CharacterDto, DataError.Remote>
 
+    suspend fun getCharacterById(
+        ids: List<Int>
+    ): Result<List<CharacterDto>, DataError.Remote>
+
+    suspend fun getEpisode(id: Int): Result<EpisodeDto, DataError.Remote>
     suspend fun getEpisodes(
         page: Int = 1,
         name: String? = null,
@@ -30,5 +35,4 @@ interface RickAndMortyApi {
     suspend fun getEpisodeById(
         ids: List<Int>
     ): Result<List<EpisodeDto>, DataError.Remote>
-
 }

@@ -1,4 +1,4 @@
-package com.mjalocha.rickandmortyapp.ui.characters_screen
+package com.mjalocha.rickandmortyapp.ui.characters
 
 import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
 import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto

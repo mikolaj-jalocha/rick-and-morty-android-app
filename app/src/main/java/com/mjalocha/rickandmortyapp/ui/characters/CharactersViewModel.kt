@@ -1,4 +1,4 @@
-package com.mjalocha.rickandmortyapp.ui.characters_screen
+package com.mjalocha.rickandmortyapp.ui.characters
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

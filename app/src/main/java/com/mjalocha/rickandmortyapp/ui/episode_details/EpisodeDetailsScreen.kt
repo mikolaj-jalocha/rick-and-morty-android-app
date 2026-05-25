@@ -1,4 +1,4 @@
-package com.mjalocha.rickandmortyapp.ui.episode_details_screen
+package com.mjalocha.rickandmortyapp.ui.episode_details
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

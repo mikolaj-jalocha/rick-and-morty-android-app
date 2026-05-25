@@ -1,8 +1,8 @@
 package com.mjalocha.rickandmortyapp.di
 
 import com.mjalocha.rickandmortyapp.ui.character_details.CharacterDetailsScreen
-import com.mjalocha.rickandmortyapp.ui.characters_screen.CharactersScreen
-import com.mjalocha.rickandmortyapp.ui.episode_details_screen.EpisodeDetailsScreen
+import com.mjalocha.rickandmortyapp.ui.characters.CharactersScreen
+import com.mjalocha.rickandmortyapp.ui.episode_details.EpisodeDetailsScreen
 import com.mjalocha.rickandmortyapp.ui.navigation.Navigator
 import com.mjalocha.rickandmortyapp.ui.navigation.Route
 import org.koin.core.annotation.KoinExperimentalAPI

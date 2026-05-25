@@ -1,4 +1,4 @@
-package com.mjalocha.rickandmortyapp.ui.characters_screen
+package com.mjalocha.rickandmortyapp.ui.characters
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

@@ -1,4 +1,4 @@
-package com.mjalocha.rickandmortyapp.ui.episode_details_screen
+package com.mjalocha.rickandmortyapp.ui.episode_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -36,7 +36,13 @@ class EpisodeDetailsViewModel(
             repository.getEpisode(episodeId).onSuccess { data ->
                 _state.update { it.copy(isLoading = false, episode = data, errorMessage = null) }
             }.onError { error ->
-                _state.update { it.copy(isLoading = false, episode = null, errorMessage = error.name) }
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        episode = null,
+                        errorMessage = error.name
+                    )
+                }
             }
         }
     }

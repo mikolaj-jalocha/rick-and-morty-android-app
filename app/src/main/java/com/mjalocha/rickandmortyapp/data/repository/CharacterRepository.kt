@@ -11,14 +11,10 @@ interface CharacterRepository {
         page: Int = 1,
         name: String? = null,
         status: Status? = null,
-        gender: Gender? = null
+        gender: Gender? = null,
     ): Result<List<CharacterDetails>, DataError.Remote>
 
-    suspend fun getCharacter(
-        id: Int
-    ): Result<CharacterDetails, DataError.Remote>
+    suspend fun getCharacter(id: Int): Result<CharacterDetails, DataError.Remote>
 
-    suspend fun getCharacterById(
-        ids: List<Int>
-    ): Result<List<CharacterDetails>, DataError.Remote>
+    suspend fun getCharacterById(ids: List<Int>): Result<List<CharacterDetails>, DataError.Remote>
 }

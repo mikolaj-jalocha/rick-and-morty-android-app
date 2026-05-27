@@ -16,5 +16,5 @@ data class CharacterDto(
     val image: String,
     val episode: List<String>,
     val url: String,
-    val created: String
+    val created: String,
 )

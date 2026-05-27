@@ -9,4 +9,3 @@ fun EpisodeDto.charactersIds(): List<Int> =
     this.characters.mapNotNull { charUrl ->
         charUrl.substringAfterLast("character/").toIntOrNull()
     }
-

@@ -12,5 +12,5 @@ data class EpisodeDto(
     val episode: String,
     val characters: List<String>,
     val url: String,
-    val created: String
+    val created: String,
 )

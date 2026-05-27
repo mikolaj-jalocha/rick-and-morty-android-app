@@ -25,44 +25,44 @@ fun CharacterCard(
     name: String,
     status: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     ElevatedCard(
         elevation = CardDefaults.elevatedCardElevation(4.dp),
         modifier = modifier.aspectRatio(0.75f),
-        onClick = { onClick() }
+        onClick = { onClick() },
     ) {
         Column(Modifier.Companion.fillMaxSize()) {
             AsyncImage(
-                modifier = Modifier.Companion
-                    .weight(3f)
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier.Companion
+                        .weight(3f)
+                        .fillMaxWidth(),
                 model = imageUrl,
                 contentDescription = "Characters image",
                 error = painterResource(R.drawable.placeholder),
                 onLoading = {
-
                 },
-                contentScale = ContentScale.Companion.Crop
+                contentScale = ContentScale.Companion.Crop,
             )
 
             Column(
-                modifier = Modifier.Companion
-                    .weight(1f)
-                    .fillMaxSize()
-                    .padding(top = 4.dp, start = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                modifier =
+                    Modifier.Companion
+                        .weight(1f)
+                        .fillMaxSize()
+                        .padding(top = 4.dp, start = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 Text(
                     text = name,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
                 Text(
                     text = "Status: $status",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
-
         }
     }
 }

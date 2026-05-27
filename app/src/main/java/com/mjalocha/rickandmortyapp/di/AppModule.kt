@@ -18,19 +18,21 @@ import org.koin.core.annotation.Singleton
 @Module
 @ComponentScan("com.mjalocha")
 class AppModule {
-
     @OptIn(ExperimentalSerializationApi::class)
     @Singleton
-    fun httpClient(): HttpClient = HttpClient(OkHttp) {
-        install(Logging) {
-            logger = Logger.DEFAULT
-            level = LogLevel.ALL
+    fun httpClient(): HttpClient =
+        HttpClient(OkHttp) {
+            install(Logging) {
+                logger = Logger.DEFAULT
+                level = LogLevel.ALL
+            }
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        prettyPrint = true
+                        namingStrategy = JsonNamingStrategy.SnakeCase
+                    },
+                )
+            }
         }
-        install(ContentNegotiation) {
-            json(Json {
-                prettyPrint = true
-                namingStrategy = JsonNamingStrategy.SnakeCase
-            })
-        }
-    }
 }

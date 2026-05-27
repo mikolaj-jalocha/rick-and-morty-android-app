@@ -1,4 +1,4 @@
-package com.mjalocha.rickandmortyapp.ui.character_details
+package com.mjalocha.rickandmortyapp.ui.characterdetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,7 +17,7 @@ import org.koin.core.annotation.KoinViewModel
 @KoinViewModel
 class CharacterDetailsViewModel(
     @InjectedParam val characterId: Int,
-    private val repository: CharacterRepository
+    private val repository: CharacterRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow(CharacterDetailsScreenState())
     val state = _state.asStateFlow()
@@ -31,34 +31,37 @@ class CharacterDetailsViewModel(
     private fun fetchCharacter() {
         _state.update {
             it.copy(
-                isLoading = true
+                isLoading = true,
             )
         }
         characterFetchJob?.cancel()
-        characterFetchJob = viewModelScope.launch {
-            repository.getCharacter(id = characterId).onSuccess { data ->
-                _state.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = null,
-                        characterDetails = data,
-                    )
-                }
-            }.onError { error ->
-                _state.update {
-                    it.copy(
-                        errorMessage = error.name,
-                        isLoading = false,
-                        characterDetails = null
-                    )
-                }
+        characterFetchJob =
+            viewModelScope.launch {
+                repository
+                    .getCharacter(id = characterId)
+                    .onSuccess { data ->
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                errorMessage = null,
+                                characterDetails = data,
+                            )
+                        }
+                    }.onError { error ->
+                        _state.update {
+                            it.copy(
+                                errorMessage = error.name,
+                                isLoading = false,
+                                characterDetails = null,
+                            )
+                        }
+                    }
             }
-        }
     }
 }
 
 data class CharacterDetailsScreenState(
     val characterDetails: CharacterDetails? = null,
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
 )

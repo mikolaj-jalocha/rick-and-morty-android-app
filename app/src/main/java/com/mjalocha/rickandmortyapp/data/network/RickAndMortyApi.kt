@@ -14,25 +14,20 @@ interface RickAndMortyApi {
         page: Int = 1,
         name: String? = null,
         status: Status? = null,
-        gender: Gender? = null
+        gender: Gender? = null,
     ): Result<CharacterResponse, DataError.Remote>
 
-    suspend fun getCharacter(
-        id: Int
-    ): Result<CharacterDto, DataError.Remote>
+    suspend fun getCharacter(id: Int): Result<CharacterDto, DataError.Remote>
 
-    suspend fun getCharacterById(
-        ids: List<Int>
-    ): Result<List<CharacterDto>, DataError.Remote>
+    suspend fun getCharacterById(ids: List<Int>): Result<List<CharacterDto>, DataError.Remote>
 
     suspend fun getEpisode(id: Int): Result<EpisodeDto, DataError.Remote>
+
     suspend fun getEpisodes(
         page: Int = 1,
         name: String? = null,
-        episodeCode: String? = null
+        episodeCode: String? = null,
     ): Result<EpisodeResponse, DataError.Remote>
 
-    suspend fun getEpisodeById(
-        ids: List<Int>
-    ): Result<List<EpisodeDto>, DataError.Remote>
+    suspend fun getEpisodeById(ids: List<Int>): Result<List<EpisodeDto>, DataError.Remote>
 }

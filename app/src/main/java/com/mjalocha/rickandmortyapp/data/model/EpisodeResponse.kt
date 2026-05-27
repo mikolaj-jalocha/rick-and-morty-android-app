@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class EpisodeResponse(
     val info: ResponseMetaData,
-    val results: List<EpisodeDto>
+    val results: List<EpisodeDto>,
 )

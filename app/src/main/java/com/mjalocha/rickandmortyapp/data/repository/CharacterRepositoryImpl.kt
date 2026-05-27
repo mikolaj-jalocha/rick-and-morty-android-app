@@ -14,50 +14,53 @@ import org.koin.core.annotation.Singleton
 
 @Singleton
 class CharacterRepositoryImpl(
-    private val api: RickAndMortyApi
+    private val api: RickAndMortyApi,
 ) : CharacterRepository {
     override suspend fun getCharacters(
         page: Int,
         name: String?,
         status: Status?,
-        gender: Gender?
-    ): Result<List<CharacterDetails>, DataError.Remote> {
-
-        return when (val response = api.getCharacters(
-            page = page,
-            name = name,
-            status = status,
-            gender = gender
-        )) {
+        gender: Gender?,
+    ): Result<List<CharacterDetails>, DataError.Remote> =
+        when (
+            val response =
+                api.getCharacters(
+                    page = page,
+                    name = name,
+                    status = status,
+                    gender = gender,
+                )
+        ) {
             is Result.Success -> {
-                Result.Success(response.data.results.map {
-                    it.toCharacter(null)
-                })
+                Result.Success(
+                    response.data.results.map {
+                        it.toCharacter(null)
+                    },
+                )
             }
 
             is Result.Error -> {
                 Result.Error(response.error)
             }
         }
-    }
 
-    override suspend fun getCharacter(id: Int): Result<CharacterDetails, DataError.Remote> {
-        return when (val response = api.getCharacter(id)) {
+    override suspend fun getCharacter(id: Int): Result<CharacterDetails, DataError.Remote> =
+        when (val response = api.getCharacter(id)) {
             is Result.Success -> {
                 val ids = response.data.episodesIds()
-                val episodes = when (val response = api.getEpisodeById(ids)) {
-                    is Result.Success -> response.data.map { it.toEpisode(null) }
-                    is Result.Error -> null
-                }
+                val episodes =
+                    when (val response = api.getEpisodeById(ids)) {
+                        is Result.Success -> response.data.map { it.toEpisode(null) }
+                        is Result.Error -> null
+                    }
                 Result.Success(response.data.toCharacter(episodes))
             }
 
             is Result.Error -> Result.Error(response.error)
         }
-    }
 
-    override suspend fun getCharacterById(ids: List<Int>): Result<List<CharacterDetails>, DataError.Remote> {
-        return when (val response = api.getCharacterById(ids)) {
+    override suspend fun getCharacterById(ids: List<Int>): Result<List<CharacterDetails>, DataError.Remote> =
+        when (val response = api.getCharacterById(ids)) {
             is Result.Success -> {
                 val allEpisodeIds = response.data.flatMap { it.episodesIds() }.distinct()
                 val episodesMap: Map<Int, EpisodeDto> =
@@ -66,16 +69,16 @@ class CharacterRepositoryImpl(
                         is Result.Error -> emptyMap()
                     }
 
-                val characters = response.data.map { dto ->
-                    val idsForChar = dto.episodesIds()
-                    val eps = idsForChar.mapNotNull { episodesMap[it] }
-                    dto.toCharacter(eps.map { it.toEpisode(null) })
-                }
+                val characters =
+                    response.data.map { dto ->
+                        val idsForChar = dto.episodesIds()
+                        val eps = idsForChar.mapNotNull { episodesMap[it] }
+                        dto.toCharacter(eps.map { it.toEpisode(null) })
+                    }
 
                 Result.Success(characters)
             }
 
             is Result.Error -> Result.Error(response.error)
         }
-    }
 }

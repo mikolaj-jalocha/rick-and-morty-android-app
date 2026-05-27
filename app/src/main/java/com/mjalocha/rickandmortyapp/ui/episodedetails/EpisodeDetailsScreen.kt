@@ -1,4 +1,4 @@
-package com.mjalocha.rickandmortyapp.ui.episode_details
+package com.mjalocha.rickandmortyapp.ui.episodedetails
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,7 +41,7 @@ fun EpisodeDetailsScreen(
     episodeId: Int,
     onNavigateBack: () -> Unit,
     navigateToCharacterDetails: (Int) -> Unit,
-    viewModel: EpisodeDetailsViewModel = koinViewModel { parametersOf(episodeId) }
+    viewModel: EpisodeDetailsViewModel = koinViewModel { parametersOf(episodeId) },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -50,7 +50,7 @@ fun EpisodeDetailsScreen(
         isLoading = state.isLoading,
         errorMessage = state.errorMessage,
         onNavigateBack = onNavigateBack,
-        onCharacterClick = navigateToCharacterDetails
+        onCharacterClick = navigateToCharacterDetails,
     )
 }
 
@@ -61,7 +61,7 @@ private fun EpisodeDetailsScreen(
     isLoading: Boolean,
     errorMessage: String?,
     onNavigateBack: () -> Unit,
-    onCharacterClick: (Int) -> Unit
+    onCharacterClick: (Int) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -71,26 +71,28 @@ private fun EpisodeDetailsScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             painterResource(R.drawable.ic_back),
-                            contentDescription = "Navigate back"
+                            contentDescription = "Navigate back",
                         )
                     }
-                }
+                },
             )
-        }
+        },
     ) { contentPadding ->
         if (isLoading) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(contentPadding),
             ) {
                 LottieLoader(R.raw.loading_dots)
             }
         } else if (errorMessage != null) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(contentPadding),
             ) {
                 Text(text = "Something went wrong...")
             }
@@ -100,65 +102,66 @@ private fun EpisodeDetailsScreen(
                 modifier = Modifier.padding(contentPadding),
                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                val details = listOf(
-                    "Episode name" to episode.name,
-                    "Air date" to episode.airDate,
-                    "Episode" to episode.episode,
-                    "Created" to episode.created
-                )
+                val details =
+                    listOf(
+                        "Episode name" to episode.name,
+                        "Air date" to episode.airDate,
+                        "Episode" to episode.episode,
+                        "Created" to episode.created,
+                    )
 
                 items(details.size, span = { GridItemSpan(maxLineSpan) }) { index ->
                     val (title, value) = details[index]
                     EpisodeDetailsListItem(
                         title = title,
-                        value = value
+                        value = value,
                     )
                 }
 
                 val characters = episode.characters.orEmpty()
                 items(characters, key = { it.id }) { character ->
                     CharacterCard(
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .animateItem(),
+                        modifier =
+                            Modifier
+                                .padding(4.dp)
+                                .animateItem(),
                         imageUrl = character.image,
                         name = character.name,
                         status = character.status,
-                        onClick = { onCharacterClick(character.id) }
+                        onClick = { onCharacterClick(character.id) },
                     )
                 }
-
             }
         }
     }
 }
 
-
 @Composable
 fun EpisodeDetailsListItem(
     title: String,
     value: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     OutlinedCard(
         modifier = modifier,
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
             )
             Text(
                 text = value,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Normal
+                fontWeight = FontWeight.Normal,
             )
         }
     }
@@ -166,45 +169,47 @@ fun EpisodeDetailsListItem(
 
 @Preview(showBackground = true)
 @Composable
-fun EpisodeDetailsScreenPreview() {
+private fun EpisodeDetailsScreenPreview() {
     RickAndMortyAppTheme {
         EpisodeDetailsScreen(
-            episode = Episode(
-                id = 1,
-                name = "Pilot",
-                airDate = "December 2, 2013",
-                episode = "S01E01",
-                characters = emptyList(),
-                created = "2017-11-10T12:56:33.798Z"
-            ),
+            episode =
+                Episode(
+                    id = 1,
+                    name = "Pilot",
+                    airDate = "December 2, 2013",
+                    episode = "S01E01",
+                    characters = emptyList(),
+                    created = "2017-11-10T12:56:33.798Z",
+                ),
             isLoading = false,
             errorMessage = null,
             onNavigateBack = {},
-            onCharacterClick = {}
+            onCharacterClick = {},
         )
     }
 }
 
 @Preview(
     showBackground = true,
-    uiMode = UI_MODE_NIGHT_YES
+    uiMode = UI_MODE_NIGHT_YES,
 )
 @Composable
-fun EpisodeDetailsScreenPreviewDark() {
+private fun EpisodeDetailsScreenPreviewDark() {
     RickAndMortyAppTheme {
         EpisodeDetailsScreen(
-            episode = Episode(
-                id = 1,
-                name = "Pilot",
-                airDate = "December 2, 2013",
-                episode = "S01E01",
-                characters = emptyList(),
-                created = "2017-11-10T12:56:33.798Z"
-            ),
+            episode =
+                Episode(
+                    id = 1,
+                    name = "Pilot",
+                    airDate = "December 2, 2013",
+                    episode = "S01E01",
+                    characters = emptyList(),
+                    created = "2017-11-10T12:56:33.798Z",
+                ),
             isLoading = false,
             errorMessage = null,
             onNavigateBack = {},
-            onCharacterClick = {}
+            onCharacterClick = {},
         )
     }
 }

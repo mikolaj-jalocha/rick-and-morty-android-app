@@ -6,6 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CharacterResponse(
     val info: ResponseMetaData,
-    val results: List<CharacterDto>
+    val results: List<CharacterDto>,
 )
-

@@ -16,8 +16,8 @@ data class CharacterDetails(
     val episode: List<Episode>?,
 )
 
-fun CharacterDto.toCharacter(episodes: List<Episode>?): CharacterDetails {
-    return CharacterDetails(
+fun CharacterDto.toCharacter(episodes: List<Episode>?): CharacterDetails =
+    CharacterDetails(
         id = this.id,
         name = this.name,
         status = this.status,
@@ -26,6 +26,5 @@ fun CharacterDto.toCharacter(episodes: List<Episode>?): CharacterDetails {
         origin = this.origin,
         location = this.location,
         image = this.image,
-        episode = episodes
+        episode = episodes,
     )
-}

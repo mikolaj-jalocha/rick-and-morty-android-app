@@ -8,6 +8,6 @@ sealed interface DataError : Error {
         NO_RESULTS,
         SERVER,
         SERIALIZATION,
-        UNKNOWN
+        UNKNOWN,
     }
 }

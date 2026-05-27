@@ -16,9 +16,8 @@ import org.koin.core.annotation.KoinViewModel
 
 @KoinViewModel
 class CharactersViewModel(
-    private val repository: CharacterRepository
+    private val repository: CharacterRepository,
 ) : ViewModel() {
-
     private val _state = MutableStateFlow(CharactersScreenState())
     val state = _state.asStateFlow()
 
@@ -31,62 +30,66 @@ class CharactersViewModel(
     fun onSearchQueryChange(query: String) {
         _state.update {
             it.copy(
-                searchPhrase = query
+                searchPhrase = query,
             )
         }
         charactersFetchJob?.cancel()
-        charactersFetchJob = viewModelScope.launch {
-            delay(timeMillis = 500L)
-            repository.getCharacters(
-                name = _state.value.searchPhrase
-            )
-                .onSuccess { data ->
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            errorMessage = null,
-                            characters = data
-                        )
+        charactersFetchJob =
+            viewModelScope.launch {
+                delay(timeMillis = 500L)
+                repository
+                    .getCharacters(
+                        name = _state.value.searchPhrase,
+                    ).onSuccess { data ->
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                errorMessage = null,
+                                characters = data,
+                            )
+                        }
+                    }.onError { error ->
+                        _state.update {
+                            it.copy(
+                                errorMessage = error.name,
+                                isLoading = false,
+                                characters = emptyList(),
+                            )
+                        }
                     }
-                }.onError { error ->
-                    _state.update {
-                        it.copy(
-                            errorMessage = error.name,
-                            isLoading = false,
-                            characters = emptyList()
-                        )
-                    }
-                }
-        }
+            }
     }
 
     fun fetchCharacters() {
         _state.update {
             it.copy(
-                isLoading = true
+                isLoading = true,
             )
         }
 
         charactersFetchJob?.cancel()
-        charactersFetchJob = viewModelScope.launch {
-            repository.getCharacters().onSuccess { data ->
-                _state.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = null,
-                        characters = data
-                    )
-                }
-            }.onError { error ->
-                _state.update {
-                    it.copy(
-                        errorMessage = error.name,
-                        isLoading = false,
-                        characters = emptyList()
-                    )
-                }
+        charactersFetchJob =
+            viewModelScope.launch {
+                repository
+                    .getCharacters()
+                    .onSuccess { data ->
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                errorMessage = null,
+                                characters = data,
+                            )
+                        }
+                    }.onError { error ->
+                        _state.update {
+                            it.copy(
+                                errorMessage = error.name,
+                                isLoading = false,
+                                characters = emptyList(),
+                            )
+                        }
+                    }
             }
-        }
     }
 }
 
@@ -94,5 +97,5 @@ data class CharactersScreenState(
     val characters: List<CharacterDetails> = emptyList(),
     val searchPhrase: String = "",
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
 )

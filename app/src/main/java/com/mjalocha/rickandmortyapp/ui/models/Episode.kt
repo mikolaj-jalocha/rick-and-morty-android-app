@@ -8,16 +8,15 @@ data class Episode(
     val airDate: String,
     val episode: String,
     val characters: List<CharacterDetails>?,
-    val created: String
+    val created: String,
 )
 
-fun EpisodeDto.toEpisode(characters: List<CharacterDetails>?): Episode {
-    return Episode(
+fun EpisodeDto.toEpisode(characters: List<CharacterDetails>?): Episode =
+    Episode(
         id = this.id,
         name = this.name,
         airDate = this.airDate,
         episode = this.episode,
         characters = characters,
-        created = this.created
+        created = this.created,
     )
-}

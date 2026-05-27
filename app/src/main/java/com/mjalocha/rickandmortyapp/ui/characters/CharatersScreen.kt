@@ -45,7 +45,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun CharactersScreen(
     navigateToCharacterDetails: (characterId: Int) -> Unit,
-    viewModel: CharactersViewModel = koinViewModel()
+    viewModel: CharactersViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     CharactersScreen(
@@ -58,7 +58,7 @@ fun CharactersScreen(
         },
         onCharacterClick = {
             navigateToCharacterDetails(it)
-        }
+        },
     )
 }
 
@@ -71,15 +71,17 @@ private fun CharactersScreen(
     errorMessage: String?,
     onSearchQueryChange: (String) -> Unit,
     onCharacterClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     Scaffold(
+        modifier = modifier,
         topBar = {
             SearchBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
                 inputField = {
                     SearchBarDefaults.InputField(
                         query = searchPhrase,
@@ -98,44 +100,47 @@ private fun CharactersScreen(
                     )
                 },
                 expanded = false,
-                onExpandedChange = {}
+                onExpandedChange = {},
             ) {
-
             }
-        }
+        },
     ) { contentPadding ->
         if (isLoading) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(contentPadding),
             ) {
                 LottieLoader(R.raw.loading_dots)
             }
         } else if (errorMessage != null) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(contentPadding),
             ) {
                 Text(text = "Something went wrong...")
             }
         } else {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(contentPadding),
             ) {
                 Row(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "Characters",
-                        style = MaterialTheme.typography.headlineMedium
+                        style = MaterialTheme.typography.headlineMedium,
                     )
                     IconButton({}) {
                         Icon(painterResource(R.drawable.ic_filter), contentDescription = null)
@@ -143,21 +148,22 @@ private fun CharactersScreen(
                 }
 
                 LazyVerticalGrid(
-                    modifier = modifier.weight(3f),
+                    modifier = Modifier.weight(3f),
                     columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(all = 4.dp)
+                    contentPadding = PaddingValues(all = 4.dp),
                 ) {
                     items(characters, key = { it.id }) {
                         CharacterCard(
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .animateItem(),
+                            modifier =
+                                Modifier
+                                    .padding(8.dp)
+                                    .animateItem(),
                             imageUrl = it.image,
                             name = it.name,
                             status = it.status,
                             onClick = {
                                 onCharacterClick(it.id)
-                            }
+                            },
                         )
                     }
                 }
@@ -169,79 +175,79 @@ private fun CharactersScreen(
 @Preview(
     showSystemUi = true,
     showBackground = true,
-    device = PIXEL_9
+    device = PIXEL_9,
 )
 @Composable
-fun CharactersScreenPreview() {
+private fun CharactersScreenPreview() {
     RickAndMortyAppTheme {
         CharactersScreen(
             searchPhrase = "",
-            characters = listOf(
-                CharacterDetails(
-                    id = 1,
-                    name = "Rick Sanchez",
-                    status = "Alive",
-                    species = "Human",
-                    gender = "Male",
-                    origin = OriginDto("", ""),
-                    location = LocationDto("", ""),
-                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-                    episode = emptyList()
+            characters =
+                listOf(
+                    CharacterDetails(
+                        id = 1,
+                        name = "Rick Sanchez",
+                        status = "Alive",
+                        species = "Human",
+                        gender = "Male",
+                        origin = OriginDto("", ""),
+                        location = LocationDto("", ""),
+                        image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+                        episode = emptyList(),
+                    ),
+                    CharacterDetails(
+                        id = 2,
+                        name = "Morty Smith",
+                        status = "Alive",
+                        species = "Human",
+                        gender = "Male",
+                        origin = OriginDto("", ""),
+                        location = LocationDto("", ""),
+                        image = "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
+                        episode = emptyList(),
+                    ),
+                    CharacterDetails(
+                        id = 7,
+                        name = "Abradolf Lincler",
+                        status = "Unknown",
+                        species = "Human",
+                        gender = "Male",
+                        origin = OriginDto("", ""),
+                        location = LocationDto("", ""),
+                        image = "https://rickandmortyapi.com/api/character/avatar/7.jpeg",
+                        episode = emptyList(),
+                    ),
+                    CharacterDetails(
+                        id = 10,
+                        name = "Alan Rails",
+                        status = "Dead",
+                        species = "Human",
+                        gender = "Male",
+                        origin = OriginDto("", ""),
+                        location = LocationDto("", ""),
+                        image = "https://rickandmortyapi.com/api/character/avatar/10.jpeg",
+                        episode = emptyList(),
+                    ),
                 ),
-                CharacterDetails(
-                    id = 2,
-                    name = "Morty Smith",
-                    status = "Alive",
-                    species = "Human",
-                    gender = "Male",
-                    origin = OriginDto("", ""),
-                    location = LocationDto("", ""),
-                    image = "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
-                    episode = emptyList()
-                ),
-                CharacterDetails(
-                    id = 7,
-                    name = "Abradolf Lincler",
-                    status = "Unknown",
-                    species = "Human",
-                    gender = "Male",
-                    origin = OriginDto("", ""),
-                    location = LocationDto("", ""),
-                    image = "https://rickandmortyapi.com/api/character/avatar/7.jpeg",
-                    episode = emptyList()
-                ),
-                CharacterDetails(
-                    id = 10,
-                    name = "Alan Rails",
-                    status = "Dead",
-                    species = "Human",
-                    gender = "Male",
-                    origin = OriginDto("", ""),
-                    location = LocationDto("", ""),
-                    image = "https://rickandmortyapi.com/api/character/avatar/10.jpeg",
-                    episode = emptyList()
-                )
-            ),
             isLoading = false,
             errorMessage = null,
             onSearchQueryChange = {},
-            onCharacterClick = {}
+            onCharacterClick = {},
         )
     }
 }
 
-
 @OptIn(ExperimentalCoilApi::class)
 @Preview()
 @Composable
-fun CharacterCardPreview() {
+private fun CharacterCardPreview() {
     RickAndMortyAppTheme {
         CharacterCard(
             imageUrl = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
             name = "Rick Sanchez",
             status = "Alive",
             modifier = Modifier.width(200.dp),
-            onClick = {}
+            onClick = {},
         )
     }
 }

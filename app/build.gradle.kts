@@ -4,8 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.koin.compiler)
+    alias(libs.plugins.ktlint)
 }
-
 
 android {
     namespace = "com.mjalocha.rickandmortyapp"
@@ -26,7 +26,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -59,7 +59,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
-    //lottie
+    // lottie
     implementation(libs.lottie.compose)
 
     // ktor
@@ -90,8 +90,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.ui.text.google.fonts)
 
-
-    //tests
+    // tests
     testImplementation(libs.koin.test.junit4)
     testImplementation(libs.koin.test)
     testImplementation(libs.koin.android.test)
@@ -107,6 +106,7 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(kotlin("test"))
+    ktlintRuleset("io.nlopez.compose.rules:ktlint:0.5.9")
 }
 
 koinCompiler {

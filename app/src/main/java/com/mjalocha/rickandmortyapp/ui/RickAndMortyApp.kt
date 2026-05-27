@@ -17,7 +17,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 @Preview
-fun RickAndMortyApp() {
+private fun RickAndMortyApp() {
     RickAndMortyAppTheme {
         val entryProvider = koinEntryProvider<Any>()
         val navigator = koinInject<Navigator>()
@@ -28,16 +28,17 @@ fun RickAndMortyApp() {
             entryProvider = entryProvider,
             transitionSpec = {
                 slideInHorizontally(initialOffsetX = { it }) togetherWith
-                        slideOutHorizontally(targetOffsetX = { -it })
+                    slideOutHorizontally(targetOffsetX = { -it })
             },
             popTransitionSpec = {
                 slideInHorizontally(initialOffsetX = { -it }) togetherWith
-                        slideOutHorizontally(targetOffsetX = { it })
+                    slideOutHorizontally(targetOffsetX = { it })
             },
-            entryDecorators = listOf(
-                rememberSaveableStateHolderNavEntryDecorator(),
-                rememberViewModelStoreNavEntryDecorator()
-            )
+            entryDecorators =
+                listOf(
+                    rememberSaveableStateHolderNavEntryDecorator(),
+                    rememberViewModelStoreNavEntryDecorator(),
+                ),
         )
     }
 }

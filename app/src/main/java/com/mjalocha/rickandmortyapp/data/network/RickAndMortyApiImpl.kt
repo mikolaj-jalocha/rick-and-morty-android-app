@@ -17,9 +17,8 @@ import org.koin.core.annotation.Singleton
 
 @Singleton
 class RickAndMortyApiImpl(
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
 ) : RickAndMortyApi {
-
     companion object {
         private const val BASE_URL = "https://rickandmortyapi.com/api"
     }
@@ -28,9 +27,9 @@ class RickAndMortyApiImpl(
         page: Int,
         name: String?,
         status: Status?,
-        gender: Gender?
-    ): Result<CharacterResponse, DataError.Remote> {
-        return safeCall<CharacterResponse> {
+        gender: Gender?,
+    ): Result<CharacterResponse, DataError.Remote> =
+        safeCall<CharacterResponse> {
             httpClient.get {
                 url("$BASE_URL/character")
                 parameter("page", page)
@@ -46,31 +45,27 @@ class RickAndMortyApiImpl(
                 }
             }
         }
-    }
 
-    override suspend fun getCharacter(id: Int): Result<CharacterDto, DataError.Remote> {
-        return safeCall<CharacterDto> {
+    override suspend fun getCharacter(id: Int): Result<CharacterDto, DataError.Remote> =
+        safeCall<CharacterDto> {
             httpClient.get {
                 url("$BASE_URL/character/$id")
             }
         }
-    }
 
-
-    override suspend fun getEpisode(id: Int): Result<EpisodeDto, DataError.Remote> {
-        return safeCall<EpisodeDto> {
+    override suspend fun getEpisode(id: Int): Result<EpisodeDto, DataError.Remote> =
+        safeCall<EpisodeDto> {
             httpClient.get {
                 url("$BASE_URL/episode/$id")
             }
         }
-    }
 
     override suspend fun getEpisodes(
         page: Int,
         name: String?,
-        episodeCode: String?
-    ): Result<EpisodeResponse, DataError.Remote> {
-        return safeCall<EpisodeResponse> {
+        episodeCode: String?,
+    ): Result<EpisodeResponse, DataError.Remote> =
+        safeCall<EpisodeResponse> {
             httpClient.get {
                 httpClient.get {
                     url("$BASE_URL/episode")
@@ -85,23 +80,18 @@ class RickAndMortyApiImpl(
                 }
             }
         }
-    }
 
-    override suspend fun getEpisodeById(
-        ids: List<Int>
-    ): Result<List<EpisodeDto>, DataError.Remote> {
-        return safeCall<List<EpisodeDto>> {
+    override suspend fun getEpisodeById(ids: List<Int>): Result<List<EpisodeDto>, DataError.Remote> =
+        safeCall<List<EpisodeDto>> {
             httpClient.get {
                 url("$BASE_URL/episode/${ids.joinToString(",", postfix = ",")}")
             }
         }
-    }
 
-    override suspend fun getCharacterById(ids: List<Int>): Result<List<CharacterDto>, DataError.Remote> {
-        return safeCall<List<CharacterDto>> {
+    override suspend fun getCharacterById(ids: List<Int>): Result<List<CharacterDto>, DataError.Remote> =
+        safeCall<List<CharacterDto>> {
             httpClient.get {
                 url("$BASE_URL/character/${ids.joinToString(",", postfix = ",")}")
             }
         }
-    }
 }

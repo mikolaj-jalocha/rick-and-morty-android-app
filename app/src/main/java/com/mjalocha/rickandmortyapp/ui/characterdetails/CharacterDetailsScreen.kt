@@ -1,4 +1,4 @@
-package com.mjalocha.rickandmortyapp.ui.character_details
+package com.mjalocha.rickandmortyapp.ui.characterdetails
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -59,7 +59,7 @@ fun CharacterDetailsScreen(
     characterId: Int,
     onNavigateBack: () -> Unit,
     onEpisodeClick: (Int) -> Unit,
-    viewModel: CharacterDetailsViewModel = koinViewModel { parametersOf(characterId) }
+    viewModel: CharacterDetailsViewModel = koinViewModel { parametersOf(characterId) },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     CharacterDetailsScreen(
@@ -67,7 +67,7 @@ fun CharacterDetailsScreen(
         isLoading = state.isLoading,
         errorMessage = state.errorMessage,
         onNavigateBack = onNavigateBack,
-        onEpisodeClick = onEpisodeClick
+        onEpisodeClick = onEpisodeClick,
     )
 }
 
@@ -78,7 +78,7 @@ private fun CharacterDetailsScreen(
     isLoading: Boolean,
     errorMessage: String?,
     onNavigateBack: () -> Unit,
-    onEpisodeClick: (Int) -> Unit = {}
+    onEpisodeClick: (Int) -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -88,105 +88,117 @@ private fun CharacterDetailsScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             painterResource(R.drawable.ic_back),
-                            contentDescription = "Navigate back"
+                            contentDescription = "Navigate back",
                         )
                     }
-                }
+                },
             )
-        }
+        },
     ) { contentPadding ->
         if (isLoading) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(contentPadding),
             ) {
                 LottieLoader(R.raw.loading_dots)
             }
         } else if (errorMessage != null) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(contentPadding),
             ) {
                 Text(text = "Something went wrong...")
             }
         } else if (character != null) {
             LazyColumn(
-                contentPadding = contentPadding
+                contentPadding = contentPadding,
             ) {
                 item {
                     AsyncImage(
                         model = character.image,
                         contentDescription = "Image of the character",
                         error = painterResource(R.drawable.placeholder),
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        contentScale = ContentScale.Crop
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(),
+                        contentScale = ContentScale.Crop,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
                         text = character.name,
                         style = MaterialTheme.typography.headlineLarge,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(Alignment.CenterHorizontally)
-
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .wrapContentWidth(Alignment.CenterHorizontally),
                     )
 
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 4.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(top = 4.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
                     ) {
-                        //TODO: extract to domain model
+                        // TODO: extract to domain model
                         val contentColor =
-                            if (character.status == "Alive") Color(0xFF97CE4C) else Color(
-                                0xFFFF0000
-                            )
+                            if (character.status == "Alive") {
+                                Color(0xFF97CE4C)
+                            } else {
+                                Color(
+                                    0xFFFF0000,
+                                )
+                            }
 
                         Icon(
                             painterResource(R.drawable.ic_circle),
                             contentDescription = null,
                             tint = contentColor,
-                            modifier = Modifier
-                                .padding(horizontal = 4.dp)
-                                .size(16.dp)
+                            modifier =
+                                Modifier
+                                    .padding(horizontal = 4.dp)
+                                    .size(16.dp),
                         )
 
                         Text(
                             text = character.status,
                             style = MaterialTheme.typography.labelLarge,
-                            color = contentColor
+                            color = contentColor,
                         )
                     }
 
                     Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
                     ) {
                         CharacterCardRowItem(
                             title = "Species",
                             value = character.species,
-                            modifier = Modifier.padding(
-                                start = 16.dp,
-                                end = 16.dp,
-                                bottom = 16.dp,
-                                top = 8.dp
-                            )
+                            modifier =
+                                Modifier.padding(
+                                    start = 16.dp,
+                                    end = 16.dp,
+                                    bottom = 16.dp,
+                                    top = 8.dp,
+                                ),
                         )
                         CharacterCardRowItem(
                             title = "Gender",
                             value = character.gender,
-                            modifier = Modifier.padding(
-                                start = 16.dp,
-                                end = 16.dp,
-                                bottom = 8.dp
-                            )
+                            modifier =
+                                Modifier.padding(
+                                    start = 16.dp,
+                                    end = 16.dp,
+                                    bottom = 8.dp,
+                                ),
                         )
                     }
 
@@ -195,40 +207,40 @@ private fun CharacterDetailsScreen(
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         letterSpacing = 1.sp,
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                        modifier = Modifier.padding(horizontal = 16.dp),
                     )
 
                     CharacterDetailsListItem(
                         title = character.origin.name,
                         leadingIcon = R.drawable.ic_globe,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(16.dp),
                     )
                     Text(
                         text = "LAST KNOWN LOCATION",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         letterSpacing = 1.sp,
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                        modifier = Modifier.padding(horizontal = 16.dp),
                     )
                     CharacterDetailsListItem(
                         title = character.location.name,
                         leadingIcon = R.drawable.ic_globe,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(16.dp),
                     )
                 }
                 item {
                     LazyRow(
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         items(
                             items = character.episode ?: emptyList(),
-                            key = { it.id }
+                            key = { it.id },
                         ) { episode ->
                             EpisodeItem(
                                 episode = episode,
                                 modifier = Modifier,
-                                onClick = { onEpisodeClick(episode.id) }
+                                onClick = { onEpisodeClick(episode.id) },
                             )
                         }
                     }
@@ -242,44 +254,44 @@ private fun CharacterDetailsScreen(
 fun EpisodeItem(
     episode: Episode,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
-
-    val colors = listOf(
-        Color(0xFFFAFD7C),
-        Color(0xFF82491E),
-        Color(0xFF24325F),
-        Color(0xFFB7E4F9),
-        Color(0xFFFB6467),
-        Color(0xFF526E2D),
-        Color(0xFFE762D7),
-        Color(0xFFE89242),
-        Color(0xFFFAE48B),
-        Color(0xFFA6EEE6),
-        Color(0xFF917C5D),
-        Color(0xFF69C8EC)
-    )
+    val colors =
+        listOf(
+            Color(0xFFFAFD7C),
+            Color(0xFF82491E),
+            Color(0xFF24325F),
+            Color(0xFFB7E4F9),
+            Color(0xFFFB6467),
+            Color(0xFF526E2D),
+            Color(0xFFE762D7),
+            Color(0xFFE89242),
+            Color(0xFFFAE48B),
+            Color(0xFFA6EEE6),
+            Color(0xFF917C5D),
+            Color(0xFF69C8EC),
+        )
 
     Card(
         modifier = modifier.clickable(onClick = onClick),
-        border = BorderStroke(width = 2.dp, color = colors.random())
+        border = BorderStroke(width = 2.dp, color = colors.random()),
     ) {
         Column(
             modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 32.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
                 text = "Episode ${episode.episode}",
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
             )
             Text(
                 text = episode.name,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
             )
             Text(
                 text = "Aired on ${episode.airDate}",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
     }
@@ -287,7 +299,7 @@ fun EpisodeItem(
 
 @Preview
 @Composable
-fun EpisodeItemPreview() {
+private fun EpisodeItemPreview() {
     RickAndMortyAppTheme {
         EpisodeItem(
             Episode(
@@ -296,8 +308,8 @@ fun EpisodeItemPreview() {
                 airDate = "December 2, 2013",
                 episode = "S01E01",
                 characters = emptyList(),
-                created = ""
-            )
+                created = "",
+            ),
         )
     }
 }
@@ -310,14 +322,16 @@ fun CharacterDetailsListItem(
     modifier: Modifier = Modifier,
 ) {
     ListItem(
-        modifier = modifier
-            .clip(CardDefaults.shape),
-        colors = ListItemDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-            headlineColor = MaterialTheme.colorScheme.tertiary,
-            leadingIconColor = MaterialTheme.colorScheme.primary,
-            trailingIconColor = MaterialTheme.colorScheme.onSurface
-        ),
+        modifier =
+            modifier
+                .clip(CardDefaults.shape),
+        colors =
+            ListItemDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                headlineColor = MaterialTheme.colorScheme.tertiary,
+                leadingIconColor = MaterialTheme.colorScheme.primary,
+                trailingIconColor = MaterialTheme.colorScheme.onSurface,
+            ),
         leadingContent = {
             Icon(painterResource(leadingIcon), contentDescription = null)
         },
@@ -325,15 +339,15 @@ fun CharacterDetailsListItem(
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
             )
         },
         trailingContent = {
             Icon(
                 painterResource(R.drawable.ic_next),
-                contentDescription = "See details of the character's origin"
+                contentDescription = "See details of the character's origin",
             )
-        }
+        },
     )
 }
 
@@ -341,12 +355,13 @@ fun CharacterDetailsListItem(
 private fun CharacterCardRowItem(
     title: String,
     value: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier =
+            modifier
+                .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
             text = title,
@@ -362,48 +377,50 @@ private fun CharacterCardRowItem(
 @Preview(showBackground = true)
 @Composable
 private fun CharacterDetailsScreenPreview() {
-    val mockCharacter = CharacterDetails(
-        id = 1,
-        name = "Rick Sanchez",
-        status = "Alive",
-        species = "Human",
-        gender = "Male",
-        origin = OriginDto(name = "Earth", url = ""),
-        location = LocationDto(name = "Earth", url = ""),
-        image = "",
-        episode = listOf(
-            Episode(
-                id = 1,
-                name = "Pilot",
-                airDate = "December 2, 2013",
-                episode = "S01E01",
-                characters = emptyList(),
-                created = ""
-            ),
-            Episode(
-                id = 2,
-                name = "Pilot",
-                airDate = "December 2, 2013",
-                episode = "S01E01",
-                characters = emptyList(),
-                created = ""
-            ),
-            Episode(
-                id = 3,
-                name = "Pilot",
-                airDate = "December 2, 2013",
-                episode = "S01E01",
-                characters = emptyList(),
-                created = ""
-            )
+    val mockCharacter =
+        CharacterDetails(
+            id = 1,
+            name = "Rick Sanchez",
+            status = "Alive",
+            species = "Human",
+            gender = "Male",
+            origin = OriginDto(name = "Earth", url = ""),
+            location = LocationDto(name = "Earth", url = ""),
+            image = "",
+            episode =
+                listOf(
+                    Episode(
+                        id = 1,
+                        name = "Pilot",
+                        airDate = "December 2, 2013",
+                        episode = "S01E01",
+                        characters = emptyList(),
+                        created = "",
+                    ),
+                    Episode(
+                        id = 2,
+                        name = "Pilot",
+                        airDate = "December 2, 2013",
+                        episode = "S01E01",
+                        characters = emptyList(),
+                        created = "",
+                    ),
+                    Episode(
+                        id = 3,
+                        name = "Pilot",
+                        airDate = "December 2, 2013",
+                        episode = "S01E01",
+                        characters = emptyList(),
+                        created = "",
+                    ),
+                ),
         )
-    )
     RickAndMortyAppTheme {
         CharacterDetailsScreen(
             character = mockCharacter,
             isLoading = false,
             errorMessage = null,
-            onNavigateBack = {}
+            onNavigateBack = {},
         )
     }
 }
@@ -411,48 +428,50 @@ private fun CharacterDetailsScreenPreview() {
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun CharacterDetailsScreenPreviewDarkMode() {
-    val mockCharacter = CharacterDetails(
-        id = 1,
-        name = "Rick Sanchez",
-        status = "Alive",
-        species = "Human",
-        gender = "Male",
-        origin = OriginDto(name = "Earth", url = ""),
-        location = LocationDto(name = "Earth", url = ""),
-        image = "",
-        episode = listOf(
-            Episode(
-                id = 1,
-                name = "Pilot",
-                airDate = "December 2, 2013",
-                episode = "S01E01",
-                characters = emptyList(),
-                created = ""
-            ),
-            Episode(
-                id = 2,
-                name = "Pilot",
-                airDate = "December 2, 2013",
-                episode = "S01E01",
-                characters = emptyList(),
-                created = ""
-            ),
-            Episode(
-                id = 3,
-                name = "Pilot",
-                airDate = "December 2, 2013",
-                episode = "S01E01",
-                characters = emptyList(),
-                created = ""
-            )
+    val mockCharacter =
+        CharacterDetails(
+            id = 1,
+            name = "Rick Sanchez",
+            status = "Alive",
+            species = "Human",
+            gender = "Male",
+            origin = OriginDto(name = "Earth", url = ""),
+            location = LocationDto(name = "Earth", url = ""),
+            image = "",
+            episode =
+                listOf(
+                    Episode(
+                        id = 1,
+                        name = "Pilot",
+                        airDate = "December 2, 2013",
+                        episode = "S01E01",
+                        characters = emptyList(),
+                        created = "",
+                    ),
+                    Episode(
+                        id = 2,
+                        name = "Pilot",
+                        airDate = "December 2, 2013",
+                        episode = "S01E01",
+                        characters = emptyList(),
+                        created = "",
+                    ),
+                    Episode(
+                        id = 3,
+                        name = "Pilot",
+                        airDate = "December 2, 2013",
+                        episode = "S01E01",
+                        characters = emptyList(),
+                        created = "",
+                    ),
+                ),
         )
-    )
     RickAndMortyAppTheme {
         CharacterDetailsScreen(
             character = mockCharacter,
             isLoading = false,
             errorMessage = null,
-            onNavigateBack = {}
+            onNavigateBack = {},
         )
     }
 }

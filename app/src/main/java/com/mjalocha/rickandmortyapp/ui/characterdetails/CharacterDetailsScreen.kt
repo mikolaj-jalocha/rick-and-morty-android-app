@@ -343,10 +343,10 @@ fun CharacterDetailsListItem(
             )
         },
         trailingContent = {
-            Icon(
-                painterResource(R.drawable.ic_next),
-                contentDescription = "See details of the character's origin",
-            )
+//            Icon(
+//                painterResource(R.drawable.ic_next),
+//                contentDescription = "See details of the character's origin",
+//            )
         },
     )
 }

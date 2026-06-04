@@ -1,8 +1,14 @@
 package com.mjalocha.rickandmortyapp.ui.models
 
+import com.mjalocha.rickandmortyapp.data.model.CharacterResponse
 import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
 import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
 import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto
+
+data class CharactersData(
+    val nextPage: Int?,
+    val results: List<CharacterDetails>,
+)
 
 data class CharacterDetails(
     val id: Int,
@@ -15,6 +21,26 @@ data class CharacterDetails(
     val image: String,
     val episode: List<Episode>?,
 )
+
+fun CharacterResponse.toCharacterData(): CharactersData {
+    val nextPage = this.info.next.extractPageNumber()
+    val characterDetails = this.results.map { it.toCharacter(null) }
+
+    return CharactersData(
+        nextPage = nextPage,
+        results = characterDetails,
+    )
+}
+
+fun String?.extractPageNumber(): Int? {
+    if (this != null) {
+        return this
+            .substringAfter("page=")
+            .substringBefore("&")
+            .toIntOrNull()
+    }
+    return null
+}
 
 fun CharacterDto.toCharacter(episodes: List<Episode>?): CharacterDetails =
     CharacterDetails(

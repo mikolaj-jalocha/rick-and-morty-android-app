@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.mjalocha.rickandmortyapp.data.repository
 
 import com.mjalocha.rickandmortyapp.data.model.Gender
@@ -8,7 +10,9 @@ import com.mjalocha.rickandmortyapp.data.network.RickAndMortyApi
 import com.mjalocha.rickandmortyapp.data.utils.DataError
 import com.mjalocha.rickandmortyapp.data.utils.Result
 import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
+import com.mjalocha.rickandmortyapp.ui.models.CharactersData
 import com.mjalocha.rickandmortyapp.ui.models.toCharacter
+import com.mjalocha.rickandmortyapp.ui.models.toCharacterData
 import com.mjalocha.rickandmortyapp.ui.models.toEpisode
 import org.koin.core.annotation.Singleton
 
@@ -21,7 +25,7 @@ class CharacterRepositoryImpl(
         name: String?,
         status: Status?,
         gender: Gender?,
-    ): Result<List<CharacterDetails>, DataError.Remote> =
+    ): Result<CharactersData, DataError.Remote> =
         when (
             val response =
                 api.getCharacters(
@@ -32,11 +36,7 @@ class CharacterRepositoryImpl(
                 )
         ) {
             is Result.Success -> {
-                Result.Success(
-                    response.data.results.map {
-                        it.toCharacter(null)
-                    },
-                )
+                Result.Success(response.data.toCharacterData())
             }
 
             is Result.Error -> {

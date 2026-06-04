@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +23,7 @@ import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -53,6 +56,9 @@ fun CharactersScreen(
         searchPhrase = state.searchPhrase,
         isLoading = state.isLoading,
         errorMessage = state.errorMessage,
+        isAtBottom = {
+            viewModel.fetchCharacters()
+        },
         onSearchQueryChange = {
             viewModel.onSearchQueryChange(it)
         },
@@ -69,6 +75,7 @@ private fun CharactersScreen(
     searchPhrase: String,
     isLoading: Boolean,
     errorMessage: String?,
+    isAtBottom: () -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onCharacterClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -105,7 +112,7 @@ private fun CharactersScreen(
             }
         },
     ) { contentPadding ->
-        if (isLoading) {
+        if (isLoading && characters.isEmpty()) {
             Box(
                 modifier =
                     Modifier
@@ -121,7 +128,7 @@ private fun CharactersScreen(
                         .fillMaxSize()
                         .padding(contentPadding),
             ) {
-                Text(text = "Something went wrong...")
+                Text(text = errorMessage)
             }
         } else {
             Column(
@@ -147,9 +154,24 @@ private fun CharactersScreen(
                     }
                 }
 
+                val gridState = rememberLazyGridState()
+
+                LaunchedEffect(searchPhrase) {
+                    if (searchPhrase.isNotEmpty()) {
+                        gridState.animateScrollToItem(0)
+                    }
+                }
+
+                LaunchedEffect(!(gridState.canScrollForward), isAtBottom) {
+                    if (!gridState.canScrollForward) {
+                        isAtBottom()
+                    }
+                }
+
                 LazyVerticalGrid(
                     modifier = Modifier.weight(3f),
                     columns = GridCells.Fixed(2),
+                    state = gridState,
                     contentPadding = PaddingValues(all = 4.dp),
                 ) {
                     items(characters, key = { it.id }) {
@@ -165,6 +187,21 @@ private fun CharactersScreen(
                                 onCharacterClick(it.id)
                             },
                         )
+                    }
+                    item(
+                        span = { GridItemSpan(2) },
+                    ) {
+                        if (isLoading && characters.isNotEmpty()) {
+                            Box(
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                LottieLoader(R.raw.loading_dots)
+                            }
+                        }
                     }
                 }
             }
@@ -231,6 +268,7 @@ private fun CharactersScreenPreview() {
                 ),
             isLoading = false,
             errorMessage = null,
+            isAtBottom = {},
             onSearchQueryChange = {},
             onCharacterClick = {},
         )

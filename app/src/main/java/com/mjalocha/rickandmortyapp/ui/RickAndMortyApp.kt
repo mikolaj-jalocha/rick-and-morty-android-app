@@ -4,7 +4,6 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
@@ -16,7 +15,6 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
-@Preview
 fun RickAndMortyApp() {
     RickAndMortyAppTheme {
         val entryProvider = koinEntryProvider<Any>()
@@ -28,11 +26,11 @@ fun RickAndMortyApp() {
             entryProvider = entryProvider,
             transitionSpec = {
                 slideInHorizontally(initialOffsetX = { it }) togetherWith
-                        slideOutHorizontally(targetOffsetX = { -it })
+                    slideOutHorizontally(targetOffsetX = { -it })
             },
             popTransitionSpec = {
                 slideInHorizontally(initialOffsetX = { -it }) togetherWith
-                        slideOutHorizontally(targetOffsetX = { it })
+                    slideOutHorizontally(targetOffsetX = { it })
             },
             entryDecorators =
                 listOf(

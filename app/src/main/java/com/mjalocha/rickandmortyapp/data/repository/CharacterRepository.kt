@@ -5,6 +5,7 @@ import com.mjalocha.rickandmortyapp.data.model.Status
 import com.mjalocha.rickandmortyapp.data.utils.DataError
 import com.mjalocha.rickandmortyapp.data.utils.Result
 import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
+import com.mjalocha.rickandmortyapp.ui.models.CharactersData
 
 interface CharacterRepository {
     suspend fun getCharacters(
@@ -12,7 +13,7 @@ interface CharacterRepository {
         name: String? = null,
         status: Status? = null,
         gender: Gender? = null,
-    ): Result<List<CharacterDetails>, DataError.Remote>
+    ): Result<CharactersData, DataError.Remote>
 
     suspend fun getCharacter(id: Int): Result<CharacterDetails, DataError.Remote>
 

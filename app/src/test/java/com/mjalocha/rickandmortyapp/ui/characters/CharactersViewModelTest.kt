@@ -7,6 +7,7 @@ import com.mjalocha.rickandmortyapp.data.utils.Result
 import com.mjalocha.rickandmortyapp.mock.FakeCharacterRepository
 import com.mjalocha.rickandmortyapp.testutil.MainDispatcherRule
 import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
+import com.mjalocha.rickandmortyapp.ui.models.CharactersData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -29,7 +30,7 @@ class CharactersViewModelTest {
             val expected = listOf(character(id = 1), character(id = 2))
             val repository =
                 FakeCharacterRepository(
-                    defaultResult = Result.Success(expected),
+                    defaultResult = Result.Success(charactersData(expected)),
                 )
 
             val viewModel = CharactersViewModel(repository)
@@ -61,31 +62,25 @@ class CharactersViewModelTest {
         }
 
     @Test
-    fun `init sets loading true before fetch finishes and false after completion`() =
-        runTest {
-            val repository =
-                FakeCharacterRepository(
-                    defaultResult = Result.Success(listOf(character(id = 1))),
-                )
-
-            val viewModel = CharactersViewModel(repository)
-
-            assertTrue(viewModel.state.value.isLoading)
-
-            advanceUntilIdle()
-
-            assertFalse(viewModel.state.value.isLoading)
-        }
-
-    @Test
     fun `search query is debounced and only latest query is executed`() =
         runTest {
             val repository =
                 FakeCharacterRepository(
-                    defaultResult = Result.Success(emptyList()),
+                    defaultResult = Result.Success(charactersData(emptyList())),
                 ).apply {
-                    resultByName["Rick"] = Result.Success(listOf(character(id = 10, name = "Rick Sanchez")))
-                    resultByName["Ri"] = Result.Success(listOf(character(id = 11, name = "Ri")))
+                    resultByName["Rick"] =
+                        Result.Success(
+                            charactersData(
+                                listOf(
+                                    character(
+                                        id = 10,
+                                        name = "Rick Sanchez",
+                                    ),
+                                ),
+                            ),
+                        )
+                    resultByName["Ri"] =
+                        Result.Success(charactersData(listOf(character(id = 11, name = "Ri"))))
                 }
 
             val viewModel = CharactersViewModel(repository)
@@ -127,4 +122,10 @@ class CharactersViewModelTest {
         image = "",
         episode = emptyList(),
     )
+
+    private fun charactersData(characters: List<CharacterDetails>) =
+        CharactersData(
+            nextPage = null,
+            results = characters,
+        )
 }

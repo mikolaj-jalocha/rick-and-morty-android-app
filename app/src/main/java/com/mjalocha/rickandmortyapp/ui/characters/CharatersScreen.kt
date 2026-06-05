@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,8 +45,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.annotation.ExperimentalCoilApi
 import com.mjalocha.rickandmortyapp.R
+import com.mjalocha.rickandmortyapp.data.utils.DataError
 import com.mjalocha.rickandmortyapp.ui.components.CharacterCard
-import com.mjalocha.rickandmortyapp.ui.components.LottieLoader
+import com.mjalocha.rickandmortyapp.ui.components.EmptyState
+import com.mjalocha.rickandmortyapp.ui.components.ErrorState
+import com.mjalocha.rickandmortyapp.ui.components.LoadingState
 import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
 import com.mjalocha.rickandmortyapp.ui.models.Location
 import com.mjalocha.rickandmortyapp.ui.models.Origin
@@ -63,7 +67,7 @@ fun CharactersScreen(
         statusFilterChips = state.statusFilterChips,
         searchPhrase = state.searchPhrase,
         isLoading = state.isLoading,
-        errorMessage = state.errorMessage,
+        error = state.error,
         isAtBottom = {
             viewModel.fetchCharacters()
         },
@@ -87,7 +91,7 @@ private fun CharactersScreen(
     statusFilterChips: List<FilterButtonState>,
     searchPhrase: String,
     isLoading: Boolean,
-    errorMessage: String?,
+    error: DataError?,
     isAtBottom: () -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onCharacterClick: (Int) -> Unit,
@@ -133,16 +137,17 @@ private fun CharactersScreen(
                         .fillMaxSize()
                         .padding(contentPadding),
             ) {
-                LottieLoader(R.raw.loading_dots)
+                LoadingState()
             }
-        } else if (errorMessage != null) {
+        } else if (error != null) {
             Box(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(contentPadding),
+                modifier = Modifier.fillMaxSize()
             ) {
-                Text(text = errorMessage)
+                if (error == DataError.Remote.NO_RESULTS) {
+                    EmptyState(modifier = Modifier.align(Center))
+                } else {
+                    ErrorState(modifier = Modifier.align(Center))
+                }
             }
         } else {
             Column(
@@ -248,9 +253,9 @@ private fun CharactersScreen(
                                     Modifier
                                         .fillMaxWidth()
                                         .padding(16.dp),
-                                contentAlignment = Alignment.Center,
+                                contentAlignment = Center,
                             ) {
-                                LottieLoader(R.raw.loading_dots)
+                                LoadingState()
                             }
                         }
                     }
@@ -270,7 +275,7 @@ private fun CharactersScreenPreview() {
     RickAndMortyAppTheme {
         CharactersScreen(
             searchPhrase = "",
-            statusFilterChips = emptyList<FilterButtonState>(),
+            statusFilterChips = emptyList(),
             characters =
                 listOf(
                     CharacterDetails(
@@ -319,7 +324,7 @@ private fun CharactersScreenPreview() {
                     ),
                 ),
             isLoading = false,
-            errorMessage = null,
+            error = null,
             isAtBottom = {},
             onSearchQueryChange = {},
             onCharacterClick = {},

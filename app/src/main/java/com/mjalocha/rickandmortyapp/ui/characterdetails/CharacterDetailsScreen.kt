@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -46,7 +47,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.mjalocha.rickandmortyapp.R
-import com.mjalocha.rickandmortyapp.ui.components.LottieLoader
+import com.mjalocha.rickandmortyapp.ui.components.ErrorState
+import com.mjalocha.rickandmortyapp.ui.components.LoadingState
 import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
 import com.mjalocha.rickandmortyapp.ui.models.Episode
 import com.mjalocha.rickandmortyapp.ui.models.Location
@@ -103,7 +105,7 @@ private fun CharacterDetailsScreen(
                         .fillMaxSize()
                         .padding(contentPadding),
             ) {
-                LottieLoader(R.raw.loading_dots)
+                LoadingState(modifier = Modifier.align(Center))
             }
         } else if (errorMessage != null) {
             Box(
@@ -112,7 +114,7 @@ private fun CharacterDetailsScreen(
                         .fillMaxSize()
                         .padding(contentPadding),
             ) {
-                Text(text = stringResource(R.string.something_went_wrong))
+                ErrorState()
             }
         } else if (character != null) {
             LazyColumn(

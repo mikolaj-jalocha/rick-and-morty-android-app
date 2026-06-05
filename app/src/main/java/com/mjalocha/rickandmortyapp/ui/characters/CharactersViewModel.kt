@@ -1,16 +1,19 @@
 package com.mjalocha.rickandmortyapp.ui.characters
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mjalocha.rickandmortyapp.R
 import com.mjalocha.rickandmortyapp.data.model.Status
 import com.mjalocha.rickandmortyapp.data.repository.CharacterRepository
+import com.mjalocha.rickandmortyapp.data.utils.DataError
 import com.mjalocha.rickandmortyapp.data.utils.onError
 import com.mjalocha.rickandmortyapp.data.utils.onSuccess
 import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -36,6 +39,11 @@ class CharactersViewModel(
     private val selectedStatus = MutableStateFlow("")
     private var nextPage: Int? = null
     private var currentFetchJob: Job? = null
+    private var lastPaginationRequestAt = 0L
+
+    companion object {
+        private const val PAGINATION_COOLDOWN_MS = 700L
+    }
 
     init {
         viewModelScope.launch {
@@ -70,12 +78,18 @@ class CharactersViewModel(
 
     fun fetchCharacters() {
         if (_state.value.isLoading) return
-
         if (nextPage == null && !state.value.characters.isEmpty()) return
+        if (currentFetchJob?.isActive == true) return
 
         currentFetchJob =
             viewModelScope.launch {
+                val elapsed = System.currentTimeMillis() - lastPaginationRequestAt
+                if (elapsed in 0 until PAGINATION_COOLDOWN_MS) {
+                    delay(PAGINATION_COOLDOWN_MS - elapsed)
+                }
+
                 executeFetch(searchQuery.value, isInitial = false)
+                lastPaginationRequestAt = System.currentTimeMillis()
             }
     }
 
@@ -95,7 +109,7 @@ class CharactersViewModel(
                 _state.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = null,
+                        error = null,
                         characters =
                             if (isInitial) {
                                 data.results
@@ -107,7 +121,8 @@ class CharactersViewModel(
                     )
                 }
             }.onError { error ->
-                _state.update { it.copy(isLoading = false, errorMessage = error.name) }
+                Log.e("CHARACTERS_VIEW_MODEL", "Error: ${error.name}")
+                _state.update { it.copy(isLoading = false, error = error) }
             }
     }
 
@@ -147,7 +162,7 @@ data class CharactersScreenState(
     val statusFilterChips: List<FilterButtonState>,
     val searchPhrase: String = "",
     val isLoading: Boolean = false,
-    val errorMessage: String? = null,
+    val error: DataError? = null,
 )
 
 data class FilterButtonState(

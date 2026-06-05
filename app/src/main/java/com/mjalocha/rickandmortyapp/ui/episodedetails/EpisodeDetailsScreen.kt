@@ -31,7 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mjalocha.rickandmortyapp.R
 import com.mjalocha.rickandmortyapp.ui.components.CharacterCard
-import com.mjalocha.rickandmortyapp.ui.components.LottieLoader
+import com.mjalocha.rickandmortyapp.ui.components.ErrorState
+import com.mjalocha.rickandmortyapp.ui.components.LoadingState
 import com.mjalocha.rickandmortyapp.ui.models.Episode
 import com.mjalocha.rickandmortyapp.ui.theme.RickAndMortyAppTheme
 import org.koin.androidx.compose.koinViewModel
@@ -86,7 +87,7 @@ private fun EpisodeDetailsScreen(
                         .fillMaxSize()
                         .padding(contentPadding),
             ) {
-                LottieLoader(R.raw.loading_dots)
+                LoadingState()
             }
         } else if (errorMessage != null) {
             Box(
@@ -95,7 +96,7 @@ private fun EpisodeDetailsScreen(
                         .fillMaxSize()
                         .padding(contentPadding),
             ) {
-                Text(text = stringResource(R.string.something_went_wrong))
+                ErrorState()
             }
         } else if (episode != null) {
             LazyVerticalGrid(

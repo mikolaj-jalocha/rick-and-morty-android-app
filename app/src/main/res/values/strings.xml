@@ -15,4 +15,6 @@
     <string name="alive">Alive</string>
     <string name="dead">Dead</string>
     <string name="unknown">Unknown</string>
+    <string name="no_results">No results, try to search for something else</string>
+    <string name="loading">Loading</string>
 </resources>

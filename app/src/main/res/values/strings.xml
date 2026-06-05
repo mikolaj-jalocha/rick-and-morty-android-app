@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Rick And Morty App</string>
+    <string name="search">Search for a given character</string>
+    <string name="characters">Characters</string>
+    <string name="episode">Episode</string>
+    <string name="navigate_back">Navigate back</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="image_of_the_character">Image of the character</string>
+    <string name="species">Species</string>
+    <string name="gender">Gender</string>
+    <string name="origin">Origin</string>
+    <string name="last_known_location">Last known location</string>
+    <string name="aired_on">Aired on</string>
 </resources>

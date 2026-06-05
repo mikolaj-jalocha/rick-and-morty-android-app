@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
@@ -88,7 +89,7 @@ private fun CharacterDetailsScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             painterResource(R.drawable.ic_back),
-                            contentDescription = "Navigate back",
+                            contentDescription = stringResource(R.string.navigate_back),
                         )
                     }
                 },
@@ -111,7 +112,7 @@ private fun CharacterDetailsScreen(
                         .fillMaxSize()
                         .padding(contentPadding),
             ) {
-                Text(text = "Something went wrong...")
+                Text(text = stringResource(R.string.something_went_wrong))
             }
         } else if (character != null) {
             LazyColumn(
@@ -120,7 +121,7 @@ private fun CharacterDetailsScreen(
                 item {
                     AsyncImage(
                         model = character.image,
-                        contentDescription = "Image of the character",
+                        contentDescription = stringResource(R.string.image_of_the_character),
                         error = painterResource(R.drawable.placeholder),
                         modifier =
                             Modifier
@@ -180,7 +181,7 @@ private fun CharacterDetailsScreen(
                                 .padding(16.dp),
                     ) {
                         CharacterCardRowItem(
-                            title = "Species",
+                            title = stringResource(R.string.species),
                             value = character.species,
                             modifier =
                                 Modifier.padding(
@@ -191,7 +192,7 @@ private fun CharacterDetailsScreen(
                                 ),
                         )
                         CharacterCardRowItem(
-                            title = "Gender",
+                            title = stringResource(R.string.gender),
                             value = character.gender,
                             modifier =
                                 Modifier.padding(
@@ -203,7 +204,7 @@ private fun CharacterDetailsScreen(
                     }
 
                     Text(
-                        text = "ORIGIN",
+                        text = stringResource(R.string.origin).uppercase(),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         letterSpacing = 1.sp,
@@ -216,7 +217,7 @@ private fun CharacterDetailsScreen(
                         modifier = Modifier.padding(16.dp),
                     )
                     Text(
-                        text = "LAST KNOWN LOCATION",
+                        text = stringResource(R.string.last_known_location).uppercase(),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         letterSpacing = 1.sp,
@@ -281,7 +282,7 @@ fun EpisodeItem(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
-                text = "Episode ${episode.episode}",
+                text = stringResource(R.string.episode) + episode.episode,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
             )
@@ -290,7 +291,7 @@ fun EpisodeItem(
                 style = MaterialTheme.typography.titleMedium,
             )
             Text(
-                text = "Aired on ${episode.airDate}",
+                text = stringResource(R.string.aired_on) + episode.airDate,
                 style = MaterialTheme.typography.bodyMedium,
             )
         }

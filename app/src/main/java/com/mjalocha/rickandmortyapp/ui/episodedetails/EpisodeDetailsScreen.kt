@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
@@ -71,7 +72,7 @@ private fun EpisodeDetailsScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             painterResource(R.drawable.ic_back),
-                            contentDescription = "Navigate back",
+                            contentDescription = stringResource(R.string.navigate_back),
                         )
                     }
                 },
@@ -94,7 +95,7 @@ private fun EpisodeDetailsScreen(
                         .fillMaxSize()
                         .padding(contentPadding),
             ) {
-                Text(text = "Something went wrong...")
+                Text(text = stringResource(R.string.something_went_wrong))
             }
         } else if (episode != null) {
             LazyVerticalGrid(
@@ -104,6 +105,7 @@ private fun EpisodeDetailsScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
+                //TODO support translation
                 val details =
                     listOf(
                         "Episode name" to episode.name,

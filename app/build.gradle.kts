@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.client.auth)
     implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.throttle)
 
     // koin
     implementation(platform(libs.koin.bom))
@@ -106,7 +107,7 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(kotlin("test"))
-    ktlintRuleset("io.nlopez.compose.rules:ktlint:0.5.9")
+    ktlintRuleset(libs.ktlint)
 }
 
 koinCompiler {

@@ -14,6 +14,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -32,15 +33,17 @@ class CharactersViewModel(
     val state = _state.asStateFlow()
 
     private val searchQuery = MutableStateFlow("")
+    private val selectedStatus = MutableStateFlow("")
     private var nextPage: Int? = null
     private var currentFetchJob: Job? = null
 
     init {
         viewModelScope.launch {
-            searchQuery
+            combine(searchQuery, selectedStatus) { query, status ->
+                query to status
+            }
                 .debounce(500)
-                .collectLatest { query ->
-                    currentFetchJob?.cancel()
+                .collectLatest { (query, status) ->
                     nextPage = null
                     executeFetch(query, isInitial = true)
                 }
@@ -54,26 +57,22 @@ class CharactersViewModel(
         }
     }
 
+
     fun onStatusFilterChange(id: Int) {
         _state.update { state ->
-            state.copy(
-                statusFilterChips = state.statusFilterChips.map { chip ->
-                    if (chip.id == id) chip.copy(isSelected = true) else chip.copy(isSelected = false)
-                }
-            )
-        }
-
-        currentFetchJob?.cancel()
-        nextPage = null
-        currentFetchJob = viewModelScope.launch {
-            executeFetch(searchQuery.value, isInitial = true)
+            val updatedChips = state.statusFilterChips.map { chip ->
+                chip.copy(isSelected = chip.id == id)
+            }
+            selectedStatus.value = updatedChips.first { it.isSelected }.value
+            state.copy(statusFilterChips = updatedChips)
         }
     }
 
     fun fetchCharacters() {
-        if (_state.value.isLoading || (searchQuery.value.isNotEmpty() && nextPage == null)) return
+        if (_state.value.isLoading) return
 
-        currentFetchJob?.cancel()
+        if (nextPage == null && !state.value.characters.isEmpty()) return
+
         currentFetchJob =
             viewModelScope.launch {
                 executeFetch(searchQuery.value, isInitial = false)
@@ -89,7 +88,7 @@ class CharactersViewModel(
         repository
             .getCharacters(
                 page = nextPage ?: 1,
-                status = _state.value.statusFilterChips.first { it.isSelected }.value,
+                status = selectedStatus.value,
                 name = query.ifEmpty { null },
             ).onSuccess { data ->
                 nextPage = data.nextPage

@@ -214,7 +214,7 @@ private fun CharactersScreen(
                 }
 
                 LaunchedEffect(!(gridState.canScrollForward), isAtBottom) {
-                    if (!gridState.canScrollForward) {
+                    if (!gridState.canScrollForward && characters.isNotEmpty()) {
                         isAtBottom()
                     }
                 }

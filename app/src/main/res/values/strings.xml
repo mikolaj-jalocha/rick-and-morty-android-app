@@ -11,4 +11,8 @@
     <string name="origin">Origin</string>
     <string name="last_known_location">Last known location</string>
     <string name="aired_on">Aired on</string>
+    <string name="all">All</string>
+    <string name="alive">Alive</string>
+    <string name="dead">Dead</string>
+    <string name="unknown">Unknown</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.mjalocha.rickandmortyapp.ui.characters
 
+import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,12 +11,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -54,6 +60,7 @@ fun CharactersScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     CharactersScreen(
         characters = state.characters,
+        statusFilterChips = state.statusFilterChips,
         searchPhrase = state.searchPhrase,
         isLoading = state.isLoading,
         errorMessage = state.errorMessage,
@@ -66,19 +73,25 @@ fun CharactersScreen(
         onCharacterClick = {
             navigateToCharacterDetails(it)
         },
+        onStatusFilterChipClick = {
+            viewModel.onStatusFilterChange(it)
+        }
     )
 }
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CharactersScreen(
     characters: List<CharacterDetails>,
+    statusFilterChips: List<FilterButtonState>,
     searchPhrase: String,
     isLoading: Boolean,
     errorMessage: String?,
     isAtBottom: () -> Unit,
     onSearchQueryChange: (String) -> Unit,
     onCharacterClick: (Int) -> Unit,
+    onStatusFilterChipClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
@@ -138,6 +151,7 @@ private fun CharactersScreen(
                         .fillMaxSize()
                         .padding(contentPadding),
             ) {
+                var showFilterSection by remember { mutableStateOf(false) }
                 Row(
                     modifier =
                         Modifier
@@ -150,17 +164,53 @@ private fun CharactersScreen(
                         text = stringResource(R.string.characters),
                         style = MaterialTheme.typography.headlineMedium,
                     )
-                    IconButton({}) {
+                    IconButton({
+                        showFilterSection = !showFilterSection
+                    }) {
                         Icon(painterResource(R.drawable.ic_filter), contentDescription = null)
                     }
                 }
 
-                val gridState = rememberLazyGridState()
+                AnimatedVisibility(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    visible = showFilterSection
+                ) {
+                    Column {
+                        Text(text = "Status")
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            items(statusFilterChips) {
+                                FilterChip(
+                                    selected = it.isSelected,
+                                    label = { Text(stringResource(it.name)) },
+                                    leadingIcon = {
+                                        if (it.isSelected) {
+                                            Icon(
+                                                painterResource(R.drawable.ic_check),
+                                                contentDescription = null
+                                            )
+                                        }
+                                    },
+                                    onClick = {
+                                        onStatusFilterChipClick(it.id)
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
 
+                val gridState = rememberLazyGridState()
                 LaunchedEffect(searchPhrase) {
                     if (searchPhrase.isNotEmpty()) {
                         gridState.animateScrollToItem(0)
                     }
+                }
+                LaunchedEffect(statusFilterChips) {
+                    gridState.scrollToItem(0)
                 }
 
                 LaunchedEffect(!(gridState.canScrollForward), isAtBottom) {
@@ -220,6 +270,7 @@ private fun CharactersScreenPreview() {
     RickAndMortyAppTheme {
         CharactersScreen(
             searchPhrase = "",
+            statusFilterChips = emptyList<FilterButtonState>(),
             characters =
                 listOf(
                     CharacterDetails(
@@ -272,6 +323,7 @@ private fun CharactersScreenPreview() {
             isAtBottom = {},
             onSearchQueryChange = {},
             onCharacterClick = {},
+            onStatusFilterChipClick = {}
         )
     }
 }

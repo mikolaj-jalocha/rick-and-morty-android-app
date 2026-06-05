@@ -2,8 +2,6 @@
 
 package com.mjalocha.rickandmortyapp.data.repository
 
-import com.mjalocha.rickandmortyapp.data.model.Gender
-import com.mjalocha.rickandmortyapp.data.model.Status
 import com.mjalocha.rickandmortyapp.data.model.dto.EpisodeDto
 import com.mjalocha.rickandmortyapp.data.model.dto.episodesIds
 import com.mjalocha.rickandmortyapp.data.network.RickAndMortyApi
@@ -23,8 +21,8 @@ class CharacterRepositoryImpl(
     override suspend fun getCharacters(
         page: Int,
         name: String?,
-        status: Status?,
-        gender: Gender?,
+        status: String?,
+        gender: String?,
     ): Result<CharactersData, DataError.Remote> =
         when (
             val response =

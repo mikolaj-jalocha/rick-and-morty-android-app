@@ -2,8 +2,6 @@ package com.mjalocha.rickandmortyapp.data.network
 
 import com.mjalocha.rickandmortyapp.data.model.CharacterResponse
 import com.mjalocha.rickandmortyapp.data.model.EpisodeResponse
-import com.mjalocha.rickandmortyapp.data.model.Gender
-import com.mjalocha.rickandmortyapp.data.model.Status
 import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
 import com.mjalocha.rickandmortyapp.data.model.dto.EpisodeDto
 import com.mjalocha.rickandmortyapp.data.utils.DataError
@@ -26,8 +24,8 @@ class RickAndMortyApiImpl(
     override suspend fun getCharacters(
         page: Int,
         name: String?,
-        status: Status?,
-        gender: Gender?,
+        status: String?,
+        gender: String?,
     ): Result<CharacterResponse, DataError.Remote> =
         safeCall<CharacterResponse> {
             httpClient.get {
@@ -38,10 +36,10 @@ class RickAndMortyApiImpl(
                     parameter("name", name.lowercase())
                 }
                 if (status != null) {
-                    parameter("status", status.name.lowercase())
+                    parameter("status", status.lowercase())
                 }
                 if (gender != null) {
-                    parameter("gender", gender.name.lowercase())
+                    parameter("gender", gender.lowercase())
                 }
             }
         }

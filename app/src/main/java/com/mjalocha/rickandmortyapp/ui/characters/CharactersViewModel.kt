@@ -1,7 +1,10 @@
 package com.mjalocha.rickandmortyapp.ui.characters
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mjalocha.rickandmortyapp.R
+import com.mjalocha.rickandmortyapp.data.model.Status
 import com.mjalocha.rickandmortyapp.data.repository.CharacterRepository
 import com.mjalocha.rickandmortyapp.data.utils.onError
 import com.mjalocha.rickandmortyapp.data.utils.onSuccess
@@ -21,7 +24,11 @@ import org.koin.core.annotation.KoinViewModel
 class CharactersViewModel(
     private val repository: CharacterRepository,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(CharactersScreenState())
+    private val _state = MutableStateFlow(
+        CharactersScreenState(
+            statusFilterChips = createStatusFilterChips()
+        )
+    )
     val state = _state.asStateFlow()
 
     private val searchQuery = MutableStateFlow("")
@@ -47,6 +54,22 @@ class CharactersViewModel(
         }
     }
 
+    fun onStatusFilterChange(id: Int) {
+        _state.update { state ->
+            state.copy(
+                statusFilterChips = state.statusFilterChips.map { chip ->
+                    if (chip.id == id) chip.copy(isSelected = true) else chip.copy(isSelected = false)
+                }
+            )
+        }
+
+        currentFetchJob?.cancel()
+        nextPage = null
+        currentFetchJob = viewModelScope.launch {
+            executeFetch(searchQuery.value, isInitial = true)
+        }
+    }
+
     fun fetchCharacters() {
         if (_state.value.isLoading || (searchQuery.value.isNotEmpty() && nextPage == null)) return
 
@@ -66,6 +89,7 @@ class CharactersViewModel(
         repository
             .getCharacters(
                 page = nextPage ?: 1,
+                status = _state.value.statusFilterChips.first { it.isSelected }.value,
                 name = query.ifEmpty { null },
             ).onSuccess { data ->
                 nextPage = data.nextPage
@@ -87,11 +111,50 @@ class CharactersViewModel(
                 _state.update { it.copy(isLoading = false, errorMessage = error.name) }
             }
     }
+
+
+    private fun createStatusFilterChips(): List<FilterButtonState> {
+        return listOf(
+            FilterButtonState(
+                id = 1,
+                name = R.string.all,
+                value = "",
+                isSelected = true
+            ),
+            FilterButtonState(
+                id = 2,
+                name = R.string.alive,
+                value = Status.ALIVE.name.lowercase(),
+                isSelected = false
+            ),
+            FilterButtonState(
+                id = 3,
+                name = R.string.dead,
+                value = Status.DEAD.name.lowercase(),
+                isSelected = false
+            ),
+            FilterButtonState(
+                id = 4,
+                name = R.string.unknown,
+                value = Status.UNKNOWN.name.lowercase(),
+                isSelected = false
+            )
+        )
+    }
 }
 
 data class CharactersScreenState(
     val characters: List<CharacterDetails> = emptyList(),
+    val statusFilterChips: List<FilterButtonState>,
     val searchPhrase: String = "",
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
+)
+
+data class FilterButtonState(
+    val id: Int,
+    @StringRes
+    val name: Int,
+    val value: String,
+    val isSelected: Boolean = false
 )

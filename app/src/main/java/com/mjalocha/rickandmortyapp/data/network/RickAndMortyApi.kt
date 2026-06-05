@@ -2,8 +2,6 @@ package com.mjalocha.rickandmortyapp.data.network
 
 import com.mjalocha.rickandmortyapp.data.model.CharacterResponse
 import com.mjalocha.rickandmortyapp.data.model.EpisodeResponse
-import com.mjalocha.rickandmortyapp.data.model.Gender
-import com.mjalocha.rickandmortyapp.data.model.Status
 import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
 import com.mjalocha.rickandmortyapp.data.model.dto.EpisodeDto
 import com.mjalocha.rickandmortyapp.data.utils.DataError
@@ -13,8 +11,8 @@ interface RickAndMortyApi {
     suspend fun getCharacters(
         page: Int = 1,
         name: String? = null,
-        status: Status? = null,
-        gender: Gender? = null,
+        status: String? = null,
+        gender: String? = null,
     ): Result<CharacterResponse, DataError.Remote>
 
     suspend fun getCharacter(id: Int): Result<CharacterDto, DataError.Remote>

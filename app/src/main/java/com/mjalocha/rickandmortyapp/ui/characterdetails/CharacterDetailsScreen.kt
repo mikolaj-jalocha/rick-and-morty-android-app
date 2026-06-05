@@ -46,11 +46,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.mjalocha.rickandmortyapp.R
-import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
-import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto
 import com.mjalocha.rickandmortyapp.ui.components.LottieLoader
 import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
 import com.mjalocha.rickandmortyapp.ui.models.Episode
+import com.mjalocha.rickandmortyapp.ui.models.Location
+import com.mjalocha.rickandmortyapp.ui.models.Origin
 import com.mjalocha.rickandmortyapp.ui.theme.RickAndMortyAppTheme
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -385,8 +385,8 @@ private fun CharacterDetailsScreenPreview() {
             status = "Alive",
             species = "Human",
             gender = "Male",
-            origin = OriginDto(name = "Earth", url = ""),
-            location = LocationDto(name = "Earth", url = ""),
+            origin = Origin(name = "Earth"),
+            location = Location(name = "Earth"),
             image = "",
             episode =
                 listOf(
@@ -436,8 +436,8 @@ private fun CharacterDetailsScreenPreviewDarkMode() {
             status = "Alive",
             species = "Human",
             gender = "Male",
-            origin = OriginDto(name = "Earth", url = ""),
-            location = LocationDto(name = "Earth", url = ""),
+            origin = Origin(name = "Earth"),
+            location = Location(name = "Earth"),
             image = "",
             episode =
                 listOf(

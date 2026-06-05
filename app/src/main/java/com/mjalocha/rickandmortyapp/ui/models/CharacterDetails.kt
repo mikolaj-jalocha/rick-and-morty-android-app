@@ -2,8 +2,6 @@ package com.mjalocha.rickandmortyapp.ui.models
 
 import com.mjalocha.rickandmortyapp.data.model.CharacterResponse
 import com.mjalocha.rickandmortyapp.data.model.dto.CharacterDto
-import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
-import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto
 
 data class CharactersData(
     val nextPage: Int?,
@@ -16,8 +14,8 @@ data class CharacterDetails(
     val status: String,
     val species: String,
     val gender: String,
-    val origin: OriginDto,
-    val location: LocationDto,
+    val origin: Origin,
+    val location: Location,
     val image: String,
     val episode: List<Episode>?,
 )
@@ -49,8 +47,8 @@ fun CharacterDto.toCharacter(episodes: List<Episode>?): CharacterDetails =
         status = this.status,
         species = this.species,
         gender = this.gender,
-        origin = this.origin,
-        location = this.location,
+        origin = this.origin.toOrigin(),
+        location = this.location.toLocation(),
         image = this.image,
         episode = episodes,
     )

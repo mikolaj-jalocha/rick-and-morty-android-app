@@ -44,11 +44,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.annotation.ExperimentalCoilApi
 import com.mjalocha.rickandmortyapp.R
-import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
-import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto
 import com.mjalocha.rickandmortyapp.ui.components.CharacterCard
 import com.mjalocha.rickandmortyapp.ui.components.LottieLoader
 import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
+import com.mjalocha.rickandmortyapp.ui.models.Location
+import com.mjalocha.rickandmortyapp.ui.models.Origin
 import com.mjalocha.rickandmortyapp.ui.theme.RickAndMortyAppTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -279,8 +279,8 @@ private fun CharactersScreenPreview() {
                         status = "Alive",
                         species = "Human",
                         gender = "Male",
-                        origin = OriginDto("", ""),
-                        location = LocationDto("", ""),
+                        origin = Origin(""),
+                        location = Location(""),
                         image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
                         episode = emptyList(),
                     ),
@@ -290,8 +290,8 @@ private fun CharactersScreenPreview() {
                         status = "Alive",
                         species = "Human",
                         gender = "Male",
-                        origin = OriginDto("", ""),
-                        location = LocationDto("", ""),
+                        origin = Origin(""),
+                        location = Location(""),
                         image = "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
                         episode = emptyList(),
                     ),
@@ -301,8 +301,8 @@ private fun CharactersScreenPreview() {
                         status = "Unknown",
                         species = "Human",
                         gender = "Male",
-                        origin = OriginDto("", ""),
-                        location = LocationDto("", ""),
+                        origin = Origin(""),
+                        location = Location(""),
                         image = "https://rickandmortyapi.com/api/character/avatar/7.jpeg",
                         episode = emptyList(),
                     ),
@@ -312,8 +312,8 @@ private fun CharactersScreenPreview() {
                         status = "Dead",
                         species = "Human",
                         gender = "Male",
-                        origin = OriginDto("", ""),
-                        location = LocationDto("", ""),
+                        origin = Origin(""),
+                        location = Location(""),
                         image = "https://rickandmortyapi.com/api/character/avatar/10.jpeg",
                         episode = emptyList(),
                     ),

@@ -30,27 +30,6 @@ This project follows a clean, MVVM-like architecture and leverages a modern Andr
     *   **Data Layer**: Includes repositories that abstract the data sources. The `network` package contains the Ktor client (`RickAndMortyApi`) responsible for fetching data from the remote API.
     *   **Model**: DTOs (`data/model/dto`) for parsing API responses and domain models (`ui/models`) used within the UI layer.
 
-## Project Structure
-
-The codebase is organized into logical packages to maintain a clean and scalable structure.
-
-```
-.
-└── app/src/main/java/com/mjalocha/rickandmortyapp/
-    ├── data/                # Data layer
-    │   ├── model/           # DTOs, enums, and response models
-    │   ├── network/         # Ktor API interface and implementation
-    │   └── repository/      # Repositories for data abstraction
-    ├── di/                  # Koin dependency injection modules
-    └── ui/                  # UI (presentation) layer
-        ├── character_details/ # Character details screen and ViewModel
-        ├── characters_screen/ # Character list screen and ViewModel
-        ├── components/      # Reusable UI components (e.g., CharacterCard)
-        ├── episode_details_screen/ # Episode details screen and ViewModel
-        ├── models/          # UI-specific data models
-        ├── navigation/      # Navigation routes and Navigator logic
-        └── theme/           # Jetpack Compose theme, colors, and typography
-```
 ## App Screenshots
 
 <table>

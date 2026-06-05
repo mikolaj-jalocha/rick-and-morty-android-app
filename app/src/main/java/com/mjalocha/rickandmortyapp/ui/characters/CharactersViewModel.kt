@@ -167,7 +167,7 @@ data class CharactersScreenState(
 
 data class FilterButtonState(
     val id: Int,
-    @StringRes
+    @field:StringRes
     val name: Int,
     val value: String,
     val isSelected: Boolean = false

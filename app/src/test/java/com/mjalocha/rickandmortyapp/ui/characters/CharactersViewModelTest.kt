@@ -45,6 +45,43 @@ class CharactersViewModelTest {
         }
 
     @Test
+    fun `init created filter chips and set All as selected`() =
+        runTest {
+            val expected = listOf(character(id = 1), character(id = 2))
+            val repository =
+                FakeCharacterRepository(
+                    defaultResult = Result.Success(charactersData(expected)),
+                )
+
+            val viewModel = CharactersViewModel(repository)
+            advanceUntilIdle()
+
+            val state = viewModel.state.value
+            assertTrue(state.statusFilterChips.isNotEmpty())
+            assertTrue(state.statusFilterChips.first().isSelected)
+            assertTrue(state.statusFilterChips.filter { !(it.isSelected) }.size == state.statusFilterChips.size - 1)
+        }
+
+    @Test
+    fun `onStatusFilterChanged selects given item and deselects everything else`() =
+        runTest {
+            val expected = listOf(character(id = 1), character(id = 2))
+            val repository =
+                FakeCharacterRepository(
+                    defaultResult = Result.Success(charactersData(expected)),
+                )
+
+            val viewModel = CharactersViewModel(repository)
+            advanceUntilIdle()
+            viewModel.onStatusFilterChange(2)
+
+            val state = viewModel.state.value
+
+            assertTrue(state.statusFilterChips.first { it.id == 2 }.isSelected)
+            assertTrue(state.statusFilterChips.filter { !it.isSelected }.size == state.statusFilterChips.size - 1)
+        }
+
+    @Test
     fun `init sets error state when repository returns error`() =
         runTest {
             val repository =

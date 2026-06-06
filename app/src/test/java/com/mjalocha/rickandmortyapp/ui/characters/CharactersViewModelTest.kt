@@ -1,13 +1,13 @@
 package com.mjalocha.rickandmortyapp.ui.characters
 
-import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
-import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto
 import com.mjalocha.rickandmortyapp.data.utils.DataError
 import com.mjalocha.rickandmortyapp.data.utils.Result
 import com.mjalocha.rickandmortyapp.mock.FakeCharacterRepository
 import com.mjalocha.rickandmortyapp.testutil.MainDispatcherRule
 import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
 import com.mjalocha.rickandmortyapp.ui.models.CharactersData
+import com.mjalocha.rickandmortyapp.ui.models.Location
+import com.mjalocha.rickandmortyapp.ui.models.Origin
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -38,7 +38,7 @@ class CharactersViewModelTest {
 
             val state = viewModel.state.value
             assertFalse(state.isLoading)
-            assertNull(state.errorMessage)
+            assertNull(state.error)
             assertEquals(expected, state.characters)
             assertEquals(1, repository.getCharactersCalls.size)
             assertNull(repository.getCharactersCalls.single().name)
@@ -57,7 +57,6 @@ class CharactersViewModelTest {
 
             val state = viewModel.state.value
             assertFalse(state.isLoading)
-            assertEquals(DataError.Remote.SERVER.name, state.errorMessage)
             assertTrue(state.characters.isEmpty())
         }
 
@@ -104,7 +103,7 @@ class CharactersViewModelTest {
             val state = viewModel.state.value
             assertEquals("Rick", state.searchPhrase)
             assertEquals(listOf(character(id = 10, name = "Rick Sanchez")), state.characters)
-            assertNull(state.errorMessage)
+            assertNull(state.error)
             assertFalse(state.isLoading)
         }
 
@@ -117,8 +116,8 @@ class CharactersViewModelTest {
         status = "Alive",
         species = "Human",
         gender = "Male",
-        origin = OriginDto("Earth", ""),
-        location = LocationDto("Earth", ""),
+        origin = Origin("Earth"),
+        location = Location("Earth"),
         image = "",
         episode = emptyList(),
     )

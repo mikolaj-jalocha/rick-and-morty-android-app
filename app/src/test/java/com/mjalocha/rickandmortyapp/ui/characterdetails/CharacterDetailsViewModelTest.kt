@@ -1,12 +1,12 @@
 package com.mjalocha.rickandmortyapp.ui.characterdetails
 
-import com.mjalocha.rickandmortyapp.data.model.dto.LocationDto
-import com.mjalocha.rickandmortyapp.data.model.dto.OriginDto
 import com.mjalocha.rickandmortyapp.data.utils.DataError
 import com.mjalocha.rickandmortyapp.data.utils.Result
 import com.mjalocha.rickandmortyapp.mock.FakeCharacterRepository
 import com.mjalocha.rickandmortyapp.testutil.MainDispatcherRule
 import com.mjalocha.rickandmortyapp.ui.models.CharacterDetails
+import com.mjalocha.rickandmortyapp.ui.models.Location
+import com.mjalocha.rickandmortyapp.ui.models.Origin
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -83,8 +83,8 @@ class CharacterDetailsViewModelTest {
             status = "Alive",
             species = "Human",
             gender = "Male",
-            origin = OriginDto(name = "Earth", url = ""),
-            location = LocationDto(name = "Earth", url = ""),
+            origin = Origin(name = "Earth"),
+            location = Location(name = "Earth"),
             image = "",
             episode = emptyList(),
         )

@@ -12,12 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -183,7 +183,7 @@ private fun CharactersScreen(
                     visible = showFilterSection
                 ) {
                     Column {
-                        Text(text = "Status")
+                        Text(text = stringResource(R.string.status))
                         LazyRow(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
@@ -208,7 +208,7 @@ private fun CharactersScreen(
                     }
                 }
 
-                val gridState = rememberLazyGridState()
+                val gridState = rememberLazyStaggeredGridState()
                 LaunchedEffect(searchPhrase) {
                     if (searchPhrase.isNotEmpty()) {
                         gridState.animateScrollToItem(0)
@@ -224,9 +224,9 @@ private fun CharactersScreen(
                     }
                 }
 
-                LazyVerticalGrid(
+                LazyVerticalStaggeredGrid(
                     modifier = Modifier.weight(3f),
-                    columns = GridCells.Fixed(2),
+                    columns = StaggeredGridCells.Fixed(2),
                     state = gridState,
                     contentPadding = PaddingValues(all = 4.dp),
                 ) {
@@ -245,7 +245,7 @@ private fun CharactersScreen(
                         )
                     }
                     item(
-                        span = { GridItemSpan(2) },
+                        span = StaggeredGridItemSpan.FullLine,
                     ) {
                         if (isLoading && characters.isNotEmpty()) {
                             Box(

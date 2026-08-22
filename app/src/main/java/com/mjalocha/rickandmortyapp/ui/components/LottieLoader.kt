@@ -23,29 +23,29 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 
 @Composable
 fun LottieLoader(
-    modifier: Modifier = Modifier,
     @RawRes
     lottieFile: Int,
     @StringRes
     text: Int,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
             modifier
                 .padding(16.dp),
-        horizontalAlignment = Alignment.Companion.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         LottieLoader(
             lottieFile = lottieFile,
             modifier =
-                Modifier.Companion
+                Modifier
                     .fillMaxWidth(0.7f)
                     .heightIn(max = 220.dp),
         )
         Text(
             text = stringResource(text),
-            textAlign = TextAlign.Companion.Center,
+            textAlign = TextAlign.Center,
             style = MaterialTheme.typography.headlineMedium,
         )
     }

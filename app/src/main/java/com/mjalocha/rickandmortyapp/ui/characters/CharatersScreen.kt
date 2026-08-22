@@ -79,7 +79,7 @@ fun CharactersScreen(
         },
         onStatusFilterChipClick = {
             viewModel.onStatusFilterChange(it)
-        }
+        },
     )
 }
 
@@ -141,7 +141,7 @@ private fun CharactersScreen(
             }
         } else if (error != null) {
             Box(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) {
                 if (error == DataError.Remote.NO_RESULTS) {
                     EmptyState(modifier = Modifier.align(Center))
@@ -177,15 +177,16 @@ private fun CharactersScreen(
                 }
 
                 AnimatedVisibility(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    visible = showFilterSection
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                    visible = showFilterSection,
                 ) {
                     Column {
                         Text(text = stringResource(R.string.status))
                         LazyRow(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             items(statusFilterChips) {
                                 FilterChip(
@@ -195,13 +196,13 @@ private fun CharactersScreen(
                                         if (it.isSelected) {
                                             Icon(
                                                 painterResource(R.drawable.ic_check),
-                                                contentDescription = null
+                                                contentDescription = null,
                                             )
                                         }
                                     },
                                     onClick = {
                                         onStatusFilterChipClick(it.id)
-                                    }
+                                    },
                                 )
                             }
                         }
@@ -328,7 +329,7 @@ private fun CharactersScreenPreview() {
             isAtBottom = {},
             onSearchQueryChange = {},
             onCharacterClick = {},
-            onStatusFilterChipClick = {}
+            onStatusFilterChipClick = {},
         )
     }
 }

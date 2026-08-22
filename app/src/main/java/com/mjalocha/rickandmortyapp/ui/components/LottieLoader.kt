@@ -27,25 +27,26 @@ fun LottieLoader(
     @RawRes
     lottieFile: Int,
     @StringRes
-    text: Int
+    text: Int,
 ) {
     Column(
         modifier =
             modifier
                 .padding(16.dp),
         horizontalAlignment = Alignment.Companion.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         LottieLoader(
             lottieFile = lottieFile,
-            modifier = Modifier.Companion
-                .fillMaxWidth(0.7f)
-                .heightIn(max = 220.dp)
+            modifier =
+                Modifier.Companion
+                    .fillMaxWidth(0.7f)
+                    .heightIn(max = 220.dp),
         )
         Text(
             text = stringResource(text),
             textAlign = TextAlign.Companion.Center,
-            style = MaterialTheme.typography.headlineMedium
+            style = MaterialTheme.typography.headlineMedium,
         )
     }
 }

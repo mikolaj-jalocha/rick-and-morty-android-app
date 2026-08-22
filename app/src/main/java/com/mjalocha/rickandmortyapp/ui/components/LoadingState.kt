@@ -12,6 +12,8 @@ fun LoadingState(
     lottieFile: Int = R.raw.loading,
 ) {
     LottieLoader(
-        modifier = modifier, lottieFile = lottieFile, text = R.string.loading
+        modifier = modifier,
+        lottieFile = lottieFile,
+        text = R.string.loading,
     )
 }

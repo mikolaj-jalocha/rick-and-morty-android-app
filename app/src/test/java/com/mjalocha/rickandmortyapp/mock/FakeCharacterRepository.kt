@@ -10,9 +10,10 @@ class FakeCharacterRepository(
     var defaultResult: Result<CharactersData, DataError.Remote> =
         Result.Success(CharactersData(nextPage = null, results = emptyList())),
     var getCharacterResult: Result<CharacterDetails, DataError.Remote> = Result.Error(DataError.Remote.UNKNOWN),
-    var getCharacterByIdResult: Result<List<CharacterDetails>, DataError.Remote> = Result.Success(
-        emptyList()
-    ),
+    var getCharacterByIdResult: Result<List<CharacterDetails>, DataError.Remote> =
+        Result.Success(
+            emptyList(),
+        ),
 ) : CharacterRepository {
     data class GetCharactersCall(
         val page: Int,

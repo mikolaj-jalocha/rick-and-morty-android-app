@@ -28,11 +28,12 @@ import org.koin.core.annotation.KoinViewModel
 class CharactersViewModel(
     private val repository: CharacterRepository,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(
-        CharactersScreenState(
-            statusFilterChips = createStatusFilterChips()
+    private val _state =
+        MutableStateFlow(
+            CharactersScreenState(
+                statusFilterChips = createStatusFilterChips(),
+            ),
         )
-    )
     val state = _state.asStateFlow()
 
     private val searchQuery = MutableStateFlow("")
@@ -49,8 +50,7 @@ class CharactersViewModel(
         viewModelScope.launch {
             combine(searchQuery, selectedStatus) { query, status ->
                 query to status
-            }
-                .debounce(500)
+            }.debounce(500)
                 .collectLatest { (query, status) ->
                     nextPage = null
                     executeFetch(query, isInitial = true)
@@ -65,12 +65,12 @@ class CharactersViewModel(
         }
     }
 
-
     fun onStatusFilterChange(id: Int) {
         _state.update { state ->
-            val updatedChips = state.statusFilterChips.map { chip ->
-                chip.copy(isSelected = chip.id == id)
-            }
+            val updatedChips =
+                state.statusFilterChips.map { chip ->
+                    chip.copy(isSelected = chip.id == id)
+                }
             selectedStatus.value = updatedChips.first { it.isSelected }.value
             state.copy(statusFilterChips = updatedChips)
         }
@@ -126,35 +126,33 @@ class CharactersViewModel(
             }
     }
 
-
-    private fun createStatusFilterChips(): List<FilterButtonState> {
-        return listOf(
+    private fun createStatusFilterChips(): List<FilterButtonState> =
+        listOf(
             FilterButtonState(
                 id = 1,
                 name = R.string.all,
                 value = "",
-                isSelected = true
+                isSelected = true,
             ),
             FilterButtonState(
                 id = 2,
                 name = R.string.alive,
                 value = Status.ALIVE.name.lowercase(),
-                isSelected = false
+                isSelected = false,
             ),
             FilterButtonState(
                 id = 3,
                 name = R.string.dead,
                 value = Status.DEAD.name.lowercase(),
-                isSelected = false
+                isSelected = false,
             ),
             FilterButtonState(
                 id = 4,
                 name = R.string.unknown,
                 value = Status.UNKNOWN.name.lowercase(),
-                isSelected = false
-            )
+                isSelected = false,
+            ),
         )
-    }
 }
 
 data class CharactersScreenState(
@@ -170,5 +168,5 @@ data class FilterButtonState(
     @field:StringRes
     val name: Int,
     val value: String,
-    val isSelected: Boolean = false
+    val isSelected: Boolean = false,
 )

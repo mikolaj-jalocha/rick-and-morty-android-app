@@ -11,7 +11,6 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class CharacterDetailsTest {
-
     @Test
     fun `extractPageNumber null input`() {
         val nullInput: String? = null
@@ -69,15 +68,17 @@ class CharacterDetailsTest {
 
     @Test
     fun `toCharacterData mapping with null next page`() {
-        val response = CharacterResponse(
-            info = ResponseMetaData(
-                count = 0,
-                pages = 0,
-                next = null,
-                prev = null
-            ),
-            results = emptyList()
-        )
+        val response =
+            CharacterResponse(
+                info =
+                    ResponseMetaData(
+                        count = 0,
+                        pages = 0,
+                        next = null,
+                        prev = null,
+                    ),
+                results = emptyList(),
+            )
 
         val result = response.toCharacterData().nextPage
 
@@ -86,15 +87,17 @@ class CharacterDetailsTest {
 
     @Test
     fun `toCharacterData mapping with empty results`() {
-        val response = CharacterResponse(
-            info = ResponseMetaData(
-                count = 0,
-                pages = 0,
-                next = null,
-                prev = null
-            ),
-            results = emptyList()
-        )
+        val response =
+            CharacterResponse(
+                info =
+                    ResponseMetaData(
+                        count = 0,
+                        pages = 0,
+                        next = null,
+                        prev = null,
+                    ),
+                results = emptyList(),
+            )
 
         val result = response.toCharacterData().results.isEmpty()
 
@@ -103,44 +106,47 @@ class CharacterDetailsTest {
 
     @Test
     fun `toCharacterData mapping with valid data`() {
-        val response = CharacterResponse(
-            info = ResponseMetaData(
-                count = 0,
-                pages = 0,
-                next = "https://rickandmortyapi.com/api/?page=2",
-                prev = "https://rickandmortyapi.com/api/?page=1"
-            ),
-            results = listOf(
-                CharacterDto(
-                    id = 1,
-                    name = "",
-                    status = "",
-                    species = "",
-                    type = "",
-                    gender = "",
-                    origin = OriginDto("", ""),
-                    location = LocationDto("", ""),
-                    image = "",
-                    episode = emptyList(),
-                    url = "",
-                    created = ""
-                ),
-                CharacterDto(
-                    id = 2,
-                    name = "",
-                    status = "",
-                    species = "",
-                    type = "",
-                    gender = "",
-                    origin = OriginDto("", ""),
-                    location = LocationDto("", ""),
-                    image = "",
-                    episode = emptyList(),
-                    url = "",
-                    created = ""
-                )
+        val response =
+            CharacterResponse(
+                info =
+                    ResponseMetaData(
+                        count = 0,
+                        pages = 0,
+                        next = "https://rickandmortyapi.com/api/?page=2",
+                        prev = "https://rickandmortyapi.com/api/?page=1",
+                    ),
+                results =
+                    listOf(
+                        CharacterDto(
+                            id = 1,
+                            name = "",
+                            status = "",
+                            species = "",
+                            type = "",
+                            gender = "",
+                            origin = OriginDto("", ""),
+                            location = LocationDto("", ""),
+                            image = "",
+                            episode = emptyList(),
+                            url = "",
+                            created = "",
+                        ),
+                        CharacterDto(
+                            id = 2,
+                            name = "",
+                            status = "",
+                            species = "",
+                            type = "",
+                            gender = "",
+                            origin = OriginDto("", ""),
+                            location = LocationDto("", ""),
+                            image = "",
+                            episode = emptyList(),
+                            url = "",
+                            created = "",
+                        ),
+                    ),
             )
-        )
         val parsed = response.toCharacterData()
 
         assertTrue(parsed.results.isNotEmpty())

@@ -106,7 +106,7 @@ private fun EpisodeDetailsScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                //TODO support translation
+                // TODO support translation
                 val details =
                     listOf(
                         "Episode name" to episode.name,
